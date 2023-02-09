@@ -13,6 +13,7 @@ COPY --link src ./src
 RUN yarn tsc
 
 FROM node:18-slim
+WORKDIR /alice
 COPY --link .yarn ./.yarn
 COPY --link .yarnrc.yml package.json yarn.lock ./
 COPY --link tsconfig.json ./
