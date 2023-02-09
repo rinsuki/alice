@@ -81,14 +81,14 @@ export async function resolveUser(document: string, mode: (typeof resolveTypes)[
     if (userRecord == null) {
         const idUri = new URL(parsedObject.id)
         // 1. Resolve user from WebFinger
-        const originWebfinger = await resolveWebfinger(
-            idUri.hostname,
-            `acct:${parsedObject.preferredUsername}@${idUri.hostname}`,
-        )
+        const acctUri = `acct:${parsedObject.preferredUsername}@${idUri.hostname}`
+        console.info("resolving", idUri.hostname, acctUri)
+        const originWebfinger = await resolveWebfinger(idUri.hostname, acctUri)
         const originWebfingerSubjectAcct = parseAcctUrl(originWebfinger.subject)
 
         if (originWebfingerSubjectAcct == null) throw new Error("NOT_ACCT")
         if (!originWebfinger.aliases.includes(parsedObject.id)) throw new Error("ALIAS_MISSING")
+        console.info("returned_link", parsedObject.id, originWebfinger.links)
         const originWebfingerSelfActivityJson = originWebfinger.links.find(
             l => l.rel === "self" && l.type === MIME_ACTIVITY_JSON,
         )
