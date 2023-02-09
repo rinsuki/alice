@@ -87,7 +87,6 @@ export async function resolveUser(document: string, mode: (typeof resolveTypes)[
         const originWebfingerSubjectAcct = parseAcctUrl(originWebfinger.subject)
 
         if (originWebfingerSubjectAcct == null) throw new Error("NOT_ACCT")
-        if (!originWebfinger.aliases.includes(parsedObject.id)) throw new Error("ALIAS_MISSING")
         console.info("returned_link", parsedObject.id, originWebfinger.links)
         const originWebfingerSelfActivityJson = originWebfinger.links.find(
             l => l.rel === "self" && checkMimeIsActivityJson(l.type ?? ""),

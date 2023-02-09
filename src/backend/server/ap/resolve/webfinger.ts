@@ -4,7 +4,7 @@ import { ourGot } from "../../utils/send-request.js"
 
 const zWebfingerRes = z.object({
     subject: z.string(),
-    aliases: z.array(z.string()),
+    aliases: z.array(z.string()).optional(),
     links: z.array(
         z.object({
             rel: z.string().optional(),
