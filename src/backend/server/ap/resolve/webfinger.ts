@@ -7,9 +7,9 @@ const zWebfingerRes = z.object({
     aliases: z.array(z.string()),
     links: z.array(
         z.object({
-            rel: z.string(),
-            type: z.string(),
-            href: z.string(),
+            rel: z.string().optional(),
+            type: z.string().optional(),
+            href: z.string().optional(),
         }),
     ),
 })
