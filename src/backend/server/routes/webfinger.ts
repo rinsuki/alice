@@ -14,29 +14,48 @@ router.get("/", async ctx => {
             resource: z.string(),
         })
         .parse(ctx.query)
+    let user = null
     if (resource.startsWith("acct:")) {
         const [, acct] = resource.split(":")
         const parts = acct.split("@")
         if (parts.length !== 2) return
-        const user = await dataSource.getRepository(User).findOne({
+        user = await dataSource.getRepository(User).findOne({
             where: {
                 screenName: parts[0],
                 domain: IsNull(),
             },
             relations: ["localUser"],
         })
-        if (user == null) return
-        ctx.set("Content-Type", "application/jrd+json; charset=utf-8")
-        ctx.body = {
-            subject: `acct:${user.screenName}@${LOCAL_DOMAIN}`,
-            links: [
-                {
-                    rel: "self",
-                    type: "application/activity+json",
-                    href: user.uri,
+    } else if (resource.startsWith("https://")) {
+        user = await dataSource.getRepository(User).findOne({
+            where: {
+                uri: resource,
+                domain: IsNull(),
+            },
+            relations: ["localUser"],
+        })
+        if (user == null) {
+            user = await dataSource.getRepository(User).findOne({
+                where: {
+                    url: resource,
+                    domain: IsNull(),
                 },
-            ],
+                relations: ["localUser"],
+            })
         }
+    }
+    if (user == null) return
+    if (user.localUser == null) return
+    ctx.set("Content-Type", "application/jrd+json; charset=utf-8")
+    ctx.body = {
+        subject: `acct:${user.screenName}@${LOCAL_DOMAIN}`,
+        links: [
+            {
+                rel: "self",
+                type: "application/activity+json",
+                href: user.uri,
+            },
+        ],
     }
 })
 
