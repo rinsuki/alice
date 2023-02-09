@@ -7,6 +7,7 @@ import { generateSnowflakeID } from "../../utils/generate-snowflake.js"
 import { jsonLDCompact } from "../../utils/jsonld-compact.js"
 import { normalizeHost } from "../../utils/normalize-host.js"
 import { parseAcctUrl } from "../../utils/parse-acct-url.js"
+import { zJsonLdValue } from "../../utils/z-jsonld-value.js"
 
 import { resolveWebfinger } from "./webfinger.js"
 
@@ -47,12 +48,12 @@ export async function resolveUser(document: string, mode: (typeof resolveTypes)[
         .object({
             id: z.string(),
             url: z.string(),
-            preferredUsername: z.string(),
+            preferredUsername: zJsonLdValue(),
             name: z.string().optional(),
             publicKey: z.object({
                 id: z.string(),
                 owner: z.string(),
-                publicKeyPem: z.string(),
+                publicKeyPem: zJsonLdValue(),
             }),
             inbox: z.string(),
             outbox: z.string(),
