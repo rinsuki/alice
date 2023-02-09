@@ -1,6 +1,7 @@
 import { quickAddJob, TaskSpec } from "graphile-worker"
 import { z } from "zod"
 
+import { DATABASE_URL_WITH_PASSWORD } from "../../db/url.js"
 import { queueSchema } from "../../worker/schema.js"
 
 export async function addJob<Name extends keyof typeof queueSchema>(
@@ -10,7 +11,7 @@ export async function addJob<Name extends keyof typeof queueSchema>(
 ) {
     await quickAddJob(
         {
-            connectionString: process.env.DATABASE_URL,
+            connectionString: DATABASE_URL_WITH_PASSWORD,
         },
         name,
         payload,

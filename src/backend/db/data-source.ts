@@ -12,12 +12,13 @@ import { OAuthAccessToken } from "./entities/oauth-access-token.js"
 import { OAuthAuthorizationCode } from "./entities/oauth-authorization-code.js"
 import { Post } from "./entities/post.js"
 import { User } from "./entities/user.js"
+import { DATABASE_URL_WITH_PASSWORD } from "./url.js"
 
 const dn = dirname(new URL(import.meta.url).pathname)
 
 export const dataSource = new DataSource({
     type: "postgres",
-    url: process.env.DATABASE_URL,
+    url: DATABASE_URL_WITH_PASSWORD,
     entities: [
         User,
         LocalUser,
