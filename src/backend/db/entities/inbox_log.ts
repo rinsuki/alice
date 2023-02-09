@@ -1,0 +1,39 @@
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToOne, PrimaryColumn } from "typeorm"
+
+import { EntityWithTimestamps } from "../utils/entity-with-timestamps.js"
+
+import { User } from "./user.js"
+
+@Entity("inbox_log")
+@Index(["uri"], { unique: true, where: "was_undoed_by_inbox_log_id IS NULL" })
+export class InboxLog extends EntityWithTimestamps {
+    @PrimaryColumn("bigint")
+    id!: string
+
+    @Column("jsonb")
+    body!: any
+
+    @Column({
+        generatedType: "STORED",
+        asExpression: "body->>'id'",
+        unique: true,
+    })
+    uri!: string
+
+    @Column({
+        generatedType: "STORED",
+        asExpression: "body->>'type'",
+    })
+    type!: string
+
+    @OneToOne(() => InboxLog, { nullable: true })
+    @JoinColumn({ name: "was_undoed_by_inbox_log_id" })
+    wasUndoedBy!: InboxLog | null
+
+    @Column("int", { name: "last_processed_version", nullable: true })
+    lastProcessedVersion!: number
+
+    @ManyToOne(() => User)
+    @JoinColumn({ name: "user_id" })
+    user!: User
+}

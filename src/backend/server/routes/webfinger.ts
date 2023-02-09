@@ -1,0 +1,43 @@
+import { Router } from "piyo"
+import { IsNull } from "typeorm"
+import { z } from "zod"
+
+import { dataSource } from "../../db/data-source.js"
+import { User } from "../../db/entities/user.js"
+import { LOCAL_DOMAIN } from "../constants.js"
+
+const router = new Router()
+
+router.get("/", async ctx => {
+    const { resource } = z
+        .object({
+            resource: z.string(),
+        })
+        .parse(ctx.query)
+    if (resource.startsWith("acct:")) {
+        const [, acct] = resource.split(":")
+        const parts = acct.split("@")
+        if (parts.length !== 2) return
+        const user = await dataSource.getRepository(User).findOne({
+            where: {
+                screenName: parts[0],
+                domain: IsNull(),
+            },
+            relations: ["localUser"],
+        })
+        if (user == null) return
+        ctx.set("Content-Type", "application/jrd+json; charset=utf-8")
+        ctx.body = {
+            subject: `acct:${user.screenName}@${LOCAL_DOMAIN}`,
+            links: [
+                {
+                    rel: "self",
+                    type: "application/activity+json",
+                    href: user.uri,
+                },
+            ],
+        }
+    }
+})
+
+export default router

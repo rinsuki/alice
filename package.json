@@ -1,0 +1,61 @@
+{
+  "name": "alice",
+  "version": "0.1.0",
+  "author": "rinsuki <428rinsuki+git@gmail.com>",
+  "license": "AGPLv3",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "fix": "eslint --fix ",
+    "invite:create": "node dist/backend/cli/create-invite.js",
+    "typeorm": "HAS_TS_NODE=1 typeorm-ts-node-esm -d src/backend/db/data-source.ts",
+    "migrate": "HAS_TS_NODE=1 typeorm-ts-node-esm migration:run -d src/backend/db/data-source.ts",
+    "migration:create": "cd src/backend/db/migrations && typeorm-ts-node-esm migration:create",
+    "migration:generate": "cd src/backend/db/migrations && HAS_TS_NODE=1 typeorm-ts-node-esm migration:generate -d ../data-source.ts -p",
+    "migration:revert": "HAS_TS_NODE=1 typeorm-ts-node-esm migration:revert -d src/backend/db/data-source.ts"
+  },
+  "dependencies": {
+    "@peertube/http-signature": "^1.7.0",
+    "bcrypt": "^5.1.0",
+    "got": "^12.5.3",
+    "graphile-worker": "^0.13.0",
+    "http-signature": "^1.3.6",
+    "jsonld": "^8.1.0",
+    "koa-logger": "^3.2.1",
+    "koa-send": "^5.0.1",
+    "pg": "^8.9.0",
+    "piyo": "^1.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tslib": "^2.5.0",
+    "typeorm": "^0.3.11",
+    "zod": "^3.20.2"
+  },
+  "devDependencies": {
+    "@rinsuki/eslint-config": "^2.0.1",
+    "@rinsuki/prettier-config": "^1.5.0",
+    "@types/bcrypt": "^5.0.0",
+    "@types/jsonld": "^1.5.8",
+    "@types/koa-logger": "^3.1.2",
+    "@types/koa-send": "^4.1.3",
+    "@types/node": "^18.11.19",
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "eslint": "^8.33.0",
+    "prettier": "^2.8.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  },
+  "packageManager": "yarn@3.2.1",
+  "prettier": "@rinsuki/prettier-config",
+  "eslintConfig": {
+    "extends": [
+      "@rinsuki"
+    ],
+    "parserOptions": {
+      "project": [
+        "./tsconfig.json"
+      ]
+    }
+  }
+}
