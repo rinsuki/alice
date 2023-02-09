@@ -8,6 +8,7 @@
     "lint": "eslint .",
     "fix": "eslint --fix ",
     "invite:create": "node dist/backend/cli/create-invite.js",
+    "docker:typeorm": "typeorm -d dist/backend/db/data-source.js",
     "typeorm": "HAS_TS_NODE=1 typeorm-ts-node-esm -d src/backend/db/data-source.ts",
     "migrate": "HAS_TS_NODE=1 typeorm-ts-node-esm migration:run -d src/backend/db/data-source.ts",
     "migration:create": "cd src/backend/db/migrations && typeorm-ts-node-esm migration:create",
