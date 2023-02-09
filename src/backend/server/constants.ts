@@ -10,7 +10,16 @@ const pj = JSON.parse(await readFile(path.join(rootDir, "package.json"), "utf-8"
 }
 
 export const siteName = "Project Alice"
-export const MIME_ACTIVITY_JSON = "application/activity+json; charset=utf-8"
+export const MIME_ACTIVITY_JSON_WITHOUT_CHARSET = "application/activity+json"
+export const MIME_ACTIVITY_JSON_UTF_8 = MIME_ACTIVITY_JSON_WITHOUT_CHARSET + "; charset=utf-8"
+
+export function checkMimeIsActivityJson(mime: string) {
+    if (mime === MIME_ACTIVITY_JSON_WITHOUT_CHARSET) return true
+    if (mime.startsWith(MIME_ACTIVITY_JSON_WITHOUT_CHARSET + ";")) return true
+    // TODO: JSON-LD with activitystreams context
+    return false
+}
+
 export const ACTIVITYSTREAMS_PUBLIC = "https://www.w3.org/ns/activitystreams#Public"
 
 export const VERSION_ALICE = pj.version

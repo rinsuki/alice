@@ -5,7 +5,7 @@ import { dataSource } from "../../db/data-source.js"
 import { Post } from "../../db/entities/post.js"
 import { User } from "../../db/entities/user.js"
 import { apInbox } from "../ap/inbox.js"
-import { MIME_ACTIVITY_JSON } from "../constants.js"
+import { MIME_ACTIVITY_JSON_UTF_8 } from "../constants.js"
 import { renderActivityPubPost } from "../views/ap/post.js"
 import { renderActivityPubUser, renderActivityPubUserOutbox } from "../views/ap/user.js"
 
@@ -19,7 +19,7 @@ function handleActivityPubUser(ctx: ContextFromRouter<typeof router>, user: User
     }
 
     ctx.body = renderActivityPubUser(user)
-    ctx.type = MIME_ACTIVITY_JSON
+    ctx.type = MIME_ACTIVITY_JSON_UTF_8
 }
 
 const router = new Router()
@@ -100,7 +100,7 @@ router.get("/id/:uid/statuses/:sid", async ctx => {
     if (post == null) return // 404
 
     ctx.body = renderActivityPubPost(post)
-    ctx.type = MIME_ACTIVITY_JSON
+    ctx.type = MIME_ACTIVITY_JSON_UTF_8
 })
 
 export default router

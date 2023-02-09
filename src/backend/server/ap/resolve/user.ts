@@ -2,7 +2,7 @@ import { z } from "zod"
 
 import { dataSource } from "../../../db/data-source.js"
 import { User } from "../../../db/entities/user.js"
-import { MIME_ACTIVITY_JSON, RE_SN_REMOTE } from "../../constants.js"
+import { checkMimeIsActivityJson, RE_SN_REMOTE } from "../../constants.js"
 import { generateSnowflakeID } from "../../utils/generate-snowflake.js"
 import { jsonLDCompact } from "../../utils/jsonld-compact.js"
 import { normalizeHost } from "../../utils/normalize-host.js"
@@ -82,7 +82,7 @@ export async function resolveUser(document: string, mode: (typeof resolveTypes)[
         const idUri = new URL(parsedObject.id)
         // 1. Resolve user from WebFinger
         const acctUri = `acct:${parsedObject.preferredUsername}@${idUri.hostname}`
-        console.info("resolving", idUri.hostname, acctUri)
+        console.info("resolving", parsedObject.id, acctUri)
         const originWebfinger = await resolveWebfinger(idUri.hostname, acctUri)
         const originWebfingerSubjectAcct = parseAcctUrl(originWebfinger.subject)
 
@@ -90,7 +90,7 @@ export async function resolveUser(document: string, mode: (typeof resolveTypes)[
         if (!originWebfinger.aliases.includes(parsedObject.id)) throw new Error("ALIAS_MISSING")
         console.info("returned_link", parsedObject.id, originWebfinger.links)
         const originWebfingerSelfActivityJson = originWebfinger.links.find(
-            l => l.rel === "self" && l.type === MIME_ACTIVITY_JSON,
+            l => l.rel === "self" && checkMimeIsActivityJson(l.type ?? ""),
         )
         if (originWebfingerSelfActivityJson == null) {
             throw new Error(`WEBFINGER_LINK_MISSING: ${JSON.stringify({ uri: idUri.href })}`)
@@ -111,7 +111,7 @@ export async function resolveUser(document: string, mode: (typeof resolveTypes)[
                 )
             }
             const acctWebfingerSelfActivityJson = acctWebfinger.links.find(
-                l => l.rel === "self" && l.type === MIME_ACTIVITY_JSON,
+                l => l.rel === "self" && checkMimeIsActivityJson(l.type ?? ""),
             )
             if (acctWebfingerSelfActivityJson == null) {
                 throw new Error(
