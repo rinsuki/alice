@@ -142,6 +142,7 @@ export async function apInbox(ctx: ContextFromRouter<Router>, inboxUser?: LocalU
             if (isGone.success) {
                 ctx.status = 200
                 ctx.body = "Ignored since we don't know you, but rest in peace."
+                return
             }
         }
         throw e
