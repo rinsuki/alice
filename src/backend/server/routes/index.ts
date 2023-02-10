@@ -8,7 +8,7 @@ import { dataSource } from "../../db/data-source.js"
 import { Post } from "../../db/entities/post.js"
 import { User } from "../../db/entities/user.js"
 import { apInbox } from "../ap/inbox.js"
-import { rootDir, siteName } from "../constants.js"
+import { LOCAL_DOMAIN, rootDir, siteName } from "../constants.js"
 import { renderHTML } from "../utils/render-html.js"
 import { PostPage } from "../views/html/pages/post.js"
 import { UserPage } from "../views/html/pages/user.js"
@@ -38,6 +38,16 @@ router.useRouter("/users", usersRouter)
 router.useRouter("/invite", inviteRouter)
 router.useRouter("/oauth", oauthRouter)
 router.useRouter("/.well-known/webfinger", webfingerRouter)
+router.get("/.well-known/host-meta", async ctx => {
+    const body = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">',
+        `<Link rel="lrdd" type="application/xrd+xml" template="https://${LOCAL_DOMAIN}/.well-known/webfinger?resource={uri}"/>`,
+        "</XRD>",
+    ].join("\n")
+    ctx.type = "application/xrd+xml; charset=utf-8"
+    ctx.body = body
+})
 router.get("/@:userName", async ctx => {
     const { userName } = z
         .object({
