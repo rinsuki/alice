@@ -1,5 +1,6 @@
 import send from "koa-send"
 import { Router } from "piyo"
+import { createElement } from "react"
 import { IsNull } from "typeorm"
 import { z } from "zod"
 
@@ -7,7 +8,10 @@ import { dataSource } from "../../db/data-source.js"
 import { Post } from "../../db/entities/post.js"
 import { User } from "../../db/entities/user.js"
 import { apInbox } from "../ap/inbox.js"
-import { rootDir } from "../constants.js"
+import { rootDir, siteName } from "../constants.js"
+import { renderHTML } from "../utils/render-html.js"
+import { PostPage } from "../views/html/pages/post.js"
+import { UserPage } from "../views/html/pages/user.js"
 
 import apiRouter from "./api/index.js"
 import inviteRouter from "./invite.js"
@@ -52,7 +56,7 @@ router.get("/@:userName", async ctx => {
         ctx.redirect("/users/id/" + user.id)
         return
     }
-    ctx.body = `<!DOCTYPE html>\n<meta charset='UTF-8'><h1>Project Alice</h1><h2>@${user.screenName}</h2><p>WIP</p>`
+    ctx.body = renderHTML(createElement(UserPage, { user, siteName }))
 })
 router.get("/@:userName/:postId", async ctx => {
     const { userName, postId } = z
@@ -73,18 +77,16 @@ router.get("/@:userName/:postId", async ctx => {
             id: postId,
             userID: user.id,
         },
+        relations: ["application"],
     })
     if (post == null) throw ctx.throw(404, "post not found")
+    post.user = user
     ctx.set("vary", "accept")
     if (ctx.get("accept").includes("json")) {
         ctx.redirect("/users/id/" + user.id + "/statuses/" + post.id)
         return
     }
-    ctx.body = `<!DOCTYPE html>\n<meta charset='UTF-8'><h1>Project Alice</h1><article><h2><a href="/@${
-        user.screenName
-    }">@${user.screenName}</a>'s post</h2>${
-        post.html
-    }<footer><small><time datetime="${post.createdAt.toISOString()}">${post.createdAt.toISOString()}</time></small></footer></article>`
+    ctx.body = renderHTML(createElement(PostPage, { siteName, post }))
 })
 
 export default router
