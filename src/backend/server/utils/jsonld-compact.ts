@@ -21,7 +21,7 @@ export async function jsonLDCompact(document: any) {
             async documentLoader(url) {
                 const res = await ourGot(url, {
                     headers: {
-                        Accept: 'application/activity+json, application/ld+json; profile="https://www.w3.org/ns/activitystreams", application/json, */*;q=0.1',
+                        Accept: 'application/activity+json, application/ld+json; profile="https://www.w3.org/ns/activitystreams"',
                     },
                     responseType: "json",
                 })
