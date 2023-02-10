@@ -4,6 +4,7 @@ import { z } from "zod"
 import { dataSource } from "../../../../db/data-source.js"
 import { Application } from "../../../../db/entities/application.js"
 import { LocalApplication } from "../../../../db/entities/local-application.js"
+import { JSONError } from "../../../utils/errors/json-error.js"
 import { useBody } from "../../../utils/use-body.js"
 
 const router = new Router()
@@ -17,6 +18,14 @@ router.post("/", async ctx => {
             website: z.string().optional(),
         })
         .parse(await useBody(ctx))
+    if (body.website != null) {
+        const url = new URL(body.website)
+        if (url.protocol !== "https:" && url.protocol !== "http:") {
+            throw new JSONError(400, {
+                error: "website URL should be HTTP or HTTPS",
+            })
+        }
+    }
     const { localApp, clientSecret } = await LocalApplication.create()
     localApp.application.name = body.client_name
     localApp.application.website = body.website ?? null
