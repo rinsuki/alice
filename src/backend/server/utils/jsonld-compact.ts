@@ -25,10 +25,6 @@ export async function jsonLDCompact(document: any) {
                     },
                     responseType: "json",
                 })
-                if (!res.ok) {
-                    console.warn("JSONLD_DOCUMENT_LOADER_FAIL", res.statusCode, url)
-                    throw new Error(`HTTP_FAIL_${res.statusCode}}`)
-                }
                 return {
                     contextUrl: undefined,
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any

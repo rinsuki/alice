@@ -1,5 +1,6 @@
 import { createHash, createVerify } from "node:crypto"
 
+import { HTTPError } from "got"
 import { ContextFromRouter, Router } from "piyo"
 
 import { dataSource } from "../../db/data-source.js"
@@ -114,7 +115,7 @@ export async function checkHTTPSignature(
         userId?._uri ?? keyId,
         useCache ? "use-cache-if-not-outdated" : "always-refetch",
     ).catch(async e => {
-        if (e instanceof Error && e.message === "HTTP_FAIL_410") {
+        if (e instanceof HTTPError && e.response.statusCode === 410) {
             // 消えた人の検証用にキャッシュを使う
             // TODO: 本当に使っていいのかちゃんと考える
             return await resolveUser(userId?._uri ?? keyId, "prefer-cache-always")

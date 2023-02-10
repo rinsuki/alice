@@ -1,3 +1,4 @@
+import { HTTPError } from "got"
 import { ContextFromRouter, Router } from "piyo"
 import { IsNull } from "typeorm"
 import { z } from "zod"
@@ -132,7 +133,7 @@ export async function apInbox(ctx: ContextFromRouter<Router>, inboxUser?: LocalU
         ctx.body = "Accepted"
     } catch (e) {
         // 知らない人が消えた時にinboxが一生エラーで死ぬのを何とかする
-        if (e instanceof Error && e.message === "HTTP_FAIL_410") {
+        if (e instanceof HTTPError && e.response.statusCode === 410) {
             const isGone = z
                 .object({
                     type: z.literal("Delete"),
