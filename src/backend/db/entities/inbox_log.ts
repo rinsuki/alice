@@ -5,7 +5,7 @@ import { EntityWithTimestamps } from "../utils/entity-with-timestamps.js"
 import { User } from "./user.js"
 
 @Entity("inbox_log")
-@Index(["uri"], { unique: true, where: "was_undoed_by_inbox_log_id IS NULL" })
+@Index(["uri"], { unique: false })
 export class InboxLog extends EntityWithTimestamps {
     @PrimaryColumn("bigint")
     id!: string
@@ -16,7 +16,6 @@ export class InboxLog extends EntityWithTimestamps {
     @Column({
         generatedType: "STORED",
         asExpression: "body->>'id'",
-        unique: true,
     })
     uri!: string
 
