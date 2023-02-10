@@ -1,5 +1,5 @@
 import { Router } from "piyo"
-import { In } from "typeorm"
+import { In, IsNull } from "typeorm"
 import { z } from "zod"
 
 import { dataSource } from "../../../../db/data-source.js"
@@ -60,6 +60,19 @@ router.get("/relationships", async ctx => {
         endorsed: false,
         note: "Project Alice: per-user note isn't implemented currently",
     }))
+})
+
+router.get("/lookup", async ctx => {
+    const { acct } = z.object({ acct: z.string() }).parse(ctx.request.query)
+    const user = await dataSource.getRepository(User).findOne({
+        where: {
+            screenName: acct,
+            domain: IsNull(), // TODO: support remote user resolve
+        },
+    })
+    if (user == null) throw new APIError(404, "Record not found")
+
+    ctx.body = renderAPIUser(user)
 })
 
 router.get("/:id", async ctx => {
