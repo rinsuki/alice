@@ -37,3 +37,6 @@ export const RE_SN_LOCAL = /^[a-zA-Z0-9_]{1,20}$/
 export const RE_SN_REMOTE = /^[a-zA-Z0-9_.]{1,64}$/
 
 export const USER_AGENT = `project-alice/${VERSION_ALICE} (+https://${LOCAL_DOMAIN})`
+
+export const SITE_DESCRIPTION =
+    process.env.ALICE_SITE_DESCRIPTION ?? "yet another Project Alice instance"

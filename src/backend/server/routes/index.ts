@@ -8,7 +8,7 @@ import { dataSource } from "../../db/data-source.js"
 import { Post } from "../../db/entities/post.js"
 import { User } from "../../db/entities/user.js"
 import { apInbox } from "../ap/inbox.js"
-import { LOCAL_DOMAIN, rootDir, siteName } from "../constants.js"
+import { LOCAL_DOMAIN, rootDir, siteName, SITE_DESCRIPTION } from "../constants.js"
 import { renderHTML } from "../utils/render-html.js"
 import { PostPage } from "../views/html/pages/post.js"
 import { UserPage } from "../views/html/pages/user.js"
@@ -23,7 +23,7 @@ import webfingerRouter from "./webfinger.js"
 const router = new Router()
 
 router.get("/", ctx => {
-    ctx.body = '<!DOCTYPE html>\n<meta charset="UTF-8"><h1>Project Alice</h1><p>WIP</p>'
+    ctx.body = `<!DOCTYPE html>\n<meta charset="UTF-8"><h1>Project Alice</h1><div>${SITE_DESCRIPTION}</div>`
 })
 
 router.get("/avatars/original/missing.png", ctx =>
