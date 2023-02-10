@@ -15,6 +15,7 @@ import { UserPage } from "../views/html/pages/user.js"
 
 import apiRouter from "./api/index.js"
 import inviteRouter from "./invite.js"
+import nodeinfoRouter from "./nodeinfo.js"
 import oauthRouter from "./oauth.js"
 import usersRouter from "./users.js"
 import webfingerRouter from "./webfinger.js"
@@ -38,6 +39,7 @@ router.useRouter("/users", usersRouter)
 router.useRouter("/invite", inviteRouter)
 router.useRouter("/oauth", oauthRouter)
 router.useRouter("/.well-known/webfinger", webfingerRouter)
+router.useRouter("/nodeinfo", nodeinfoRouter)
 router.get("/.well-known/host-meta", async ctx => {
     const body = [
         '<?xml version="1.0" encoding="UTF-8"?>',
@@ -47,6 +49,16 @@ router.get("/.well-known/host-meta", async ctx => {
     ].join("\n")
     ctx.type = "application/xrd+xml; charset=utf-8"
     ctx.body = body
+})
+router.get("/.well-known/nodeinfo", async ctx => {
+    ctx.body = {
+        links: [
+            {
+                rel: "http://nodeinfo.diaspora.software/ns/schema/2.0",
+                href: `https://${LOCAL_DOMAIN}/nodeinfo/2.0`,
+            },
+        ],
+    }
 })
 router.get("/@:userName", async ctx => {
     const { userName } = z
