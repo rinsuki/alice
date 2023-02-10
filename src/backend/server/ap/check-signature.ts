@@ -113,7 +113,14 @@ export async function checkHTTPSignature(
     const user = await resolveUser(
         userId?._uri ?? keyId,
         useCache ? "use-cache-if-not-outdated" : "always-refetch",
-    )
+    ).catch(async e => {
+        if (e instanceof Error && e.message === "HTTP_FAIL_410") {
+            // 消えた人の検証用にキャッシュを使う
+            // TODO: 本当に使っていいのかちゃんと考える
+            return await resolveUser(userId?._uri ?? keyId, "prefer-cache-always")
+        }
+        throw e
+    })
 
     // Generate Signature String
     // https://datatracker.ietf.org/doc/html/draft-cavage-http-signatures-12#section-2.3

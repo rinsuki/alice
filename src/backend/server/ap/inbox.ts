@@ -123,9 +123,26 @@ export async function apInboxInner(requestor: User, body: any) {
 }
 
 export async function apInbox(ctx: ContextFromRouter<Router>, inboxUser?: LocalUser) {
-    const requestor = await checkHTTPSignature(ctx)
-    const body = await jsonLDCompact(await useBody(ctx))
-    await apInboxInner(requestor, body)
-    ctx.status = 202
-    ctx.body = "Accepted"
+    const bodyContent = await useBody(ctx)
+    try {
+        const requestor = await checkHTTPSignature(ctx)
+        const body = await jsonLDCompact(bodyContent)
+        await apInboxInner(requestor, body)
+        ctx.status = 202
+        ctx.body = "Accepted"
+    } catch (e) {
+        // 知らない人が消えた時にinboxが一生エラーで死ぬのを何とかする
+        if (e instanceof Error && e.message === "HTTP_FAIL_410") {
+            const isGone = z
+                .object({
+                    type: z.literal("Delete"),
+                })
+                .safeParse(bodyContent)
+            if (isGone.success) {
+                ctx.status = 200
+                ctx.body = "Ignored since we don't know you, but rest in peace."
+            }
+        }
+        throw e
+    }
 }
