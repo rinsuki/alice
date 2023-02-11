@@ -28,11 +28,13 @@ router.post("/", async ctx => {
             status: z.string(),
             // media_ids: z.array(z.string()).optional(),
             visibility: z.string().optional(),
+            spoiler_text: z.string().optional(),
         })
         .parse(body)
 
     const post = new Post()
     post.id = (await generateSnowflakeID()).toString()
+    post.spoiler = parsedBody.spoiler_text ?? ""
     post.uri = `${token.user.uri}/statuses/${post.id}`
     post.url = `https://${LOCAL_DOMAIN}/@${token.user.screenName}/${post.id}`
     let html = parsedBody.status
