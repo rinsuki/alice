@@ -34,7 +34,6 @@ router.post("/", async ctx => {
 
     const post = new Post()
     post.id = (await generateSnowflakeID()).toString()
-    post.spoiler = parsedBody.spoiler_text ?? ""
     post.uri = `${token.user.uri}/statuses/${post.id}`
     post.url = `https://${LOCAL_DOMAIN}/@${token.user.screenName}/${post.id}`
     let html = parsedBody.status
@@ -44,7 +43,7 @@ router.post("/", async ctx => {
     post.html = html
     post.user = token.user
     post.application = token.application
-    post.spoiler = ""
+    post.spoiler = parsedBody.spoiler_text ?? ""
     post.visibility = parsedBody.visibility ?? "public"
     if (!["public", "unlisted"].includes(post.visibility)) {
         throw new APIError(400, "Invalid visibility (private/direct is not supported)")
