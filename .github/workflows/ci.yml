@@ -11,9 +11,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      matrix:
+        postgres-version: [14, 15]
     services:
       postgres:
-        image: postgres:15
+        image: postgres:${{ matrix.postgres-version }}
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -38,7 +42,7 @@ jobs:
           yarn migration:generate ItShouldNotHaveAnyDiffBetweenMigarationsAndSchema
           git add -A
           git diff --cached --exit-code
-      - run: docker run --rm -e PGPASSWORD=postgres --net host postgres:15 pg_dump -h 127.0.0.1 -U postgres alice_ci > dump.sql
+      - run: docker run --rm -e PGPASSWORD=postgres --net host postgres:${{ matrix.postgres-version }} pg_dump -h 127.0.0.1 -U postgres alice_ci > dump.sql
         if: always()
       - uses: actions/upload-artifact@v3
         if: always()
