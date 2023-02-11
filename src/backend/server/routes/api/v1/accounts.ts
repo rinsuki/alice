@@ -3,6 +3,7 @@ import { In, IsNull } from "typeorm"
 import { z } from "zod"
 
 import { dataSource } from "../../../../db/data-source.js"
+import { Follow } from "../../../../db/entities/follow.js"
 import { Post } from "../../../../db/entities/post.js"
 import { User } from "../../../../db/entities/user.js"
 import { APIError } from "../../../utils/errors/api-error.js"
@@ -81,6 +82,22 @@ router.get("/:id", async ctx => {
     if (user == null) throw new APIError(404, "User not found")
 
     ctx.body = renderAPIUser(user)
+})
+
+router.get("/:id/followers", async ctx => {
+    const { id } = z.object({ id: z.string() }).parse(ctx.params)
+    const user = await dataSource.getRepository(User).findOneBy({ id })
+    if (user == null) throw new APIError(404, "User not found")
+
+    const follows = await dataSource.getRepository(Follow).find({
+        where: {
+            toUserId: user.id,
+            accepted: true,
+        },
+        relations: ["fromUser"],
+    })
+
+    ctx.body = follows.map(follow => renderAPIUser(follow.fromUser))
 })
 
 router.get("/:id/statuses", async ctx => {
