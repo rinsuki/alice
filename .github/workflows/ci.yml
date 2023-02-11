@@ -37,4 +37,4 @@ jobs:
           set -xe
           yarn migration:generate ItShouldNotHaveAnyDiffBetweenMigarationsAndSchema
           git add -A
-          git diff --exit-code
+          git diff --cached --exit-code
