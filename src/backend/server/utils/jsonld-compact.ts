@@ -1,6 +1,16 @@
 import jsonld from "jsonld"
+import { rootDir } from "../constants.js"
+import fs from "node:fs/promises"
 
 import { ourGot } from "./send-request.js"
+
+const preloadedContexts = new Map<string, unknown>()
+
+const preloadStoreDir = rootDir + "/resources/jsonld-preload"
+for (const [url, fileName] of JSON.parse(await fs.readFile(preloadStoreDir + "/list.json", "utf-8"))) {
+    const res = JSON.parse(await fs.readFile(preloadStoreDir + "/" + fileName, "utf-8"))
+    preloadedContexts.set(url, Object.freeze(res))
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function jsonLDCompact(document: any) {
@@ -19,6 +29,14 @@ export async function jsonLDCompact(document: any) {
         {
             base: "",
             async documentLoader(url) {
+                const cached = preloadedContexts.get(url)
+                if (cached != null) {
+                    return {
+                        document: cached as any,
+                        documentUrl: url,
+                    }
+                }
+                console.info("NOT_CACHED_DOCUMENT", url)
                 const res = await ourGot(url, {
                     headers: {
                         Accept: 'application/activity+json, application/ld+json; profile="https://www.w3.org/ns/activitystreams"',
