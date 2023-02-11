@@ -38,5 +38,5 @@ jobs:
           yarn migration:generate ItShouldNotHaveAnyDiffBetweenMigarationsAndSchema
           git add -A
           git diff --cached --exit-code
-      - run: docker run --rm -it -e PGPASSWORD=postgres --net host postgres:15 pg_dump -h 127.0.0.1 -U postgres alice_ci
+      - run: docker run --rm -e PGPASSWORD=postgres --net host postgres:15 pg_dump -h 127.0.0.1 -U postgres alice_ci
         if: always()
