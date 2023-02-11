@@ -33,4 +33,8 @@ jobs:
       - run: yarn tsc
       - run: yarn docker:typeorm migration:run
       - name: Check there is no diff between migrations and schema
-        run: yarn migration:generate ItShouldNotHaveAnyDiffBetweenMigarationsAndSchema && git add -A && git diff --exit-code
+        run: |
+          set -xe
+          yarn migration:generate ItShouldNotHaveAnyDiffBetweenMigarationsAndSchema
+          git add -A
+          git diff --exit-code
