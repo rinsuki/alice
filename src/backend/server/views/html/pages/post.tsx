@@ -20,9 +20,7 @@ export const PostPage: React.FC<{ post: Post; siteName: string }> = ({ post }) =
         <html>
             <head>
                 <meta charSet="UTF-8" />
-                <title>
-                    @{post.user.screenName}&apos;s post | {siteName}
-                </title>
+                <title>{`@${post.user.screenName}'s post | ${siteName}`}</title>
                 <meta name="description" content={post.html.replace(/<.+?>/g, "")} />
             </head>
             <body>
@@ -32,7 +30,14 @@ export const PostPage: React.FC<{ post: Post; siteName: string }> = ({ post }) =
                         <a href={`/@${post.user.screenName}`}>@{post.user.screenName}</a>
                         &apos;s post
                     </h2>
-                    <div dangerouslySetInnerHTML={{ __html: post.html }} />
+                    {post.spoiler.length ? (
+                        <details>
+                            <summary>{post.spoiler}</summary>
+                            <div dangerouslySetInnerHTML={{ __html: post.html }} />
+                        </details>
+                    ) : (
+                        <div dangerouslySetInnerHTML={{ __html: post.html }} />
+                    )}
                     <footer>
                         <small>
                             {...attachments.map((a, i) => {
