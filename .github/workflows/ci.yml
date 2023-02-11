@@ -36,13 +36,17 @@ jobs:
       - run: yarn install
       - run: yarn tsc
       - run: yarn docker:typeorm migration:run
+      # https://github.com/typeorm/typeorm/issues/9776
+      - name: Workarounds for TypeORM
+        run: psql -h 127.0.0.1 -U postgres alice_ci "UPDATE typeorm_metadata SET database='alice_ci' WHERE database='alice_dev'"
+        env:
+          PGPASSWORD: postgres
       - name: Check there is no diff between migrations and schema
         run: |
           set -xe
           yarn migration:generate ItShouldNotHaveAnyDiffBetweenMigarationsAndSchema
           git add -A
           git diff --cached --exit-code
-      - run: psql -h 127.0.0.1 -U postgres alice_ci "UPDATE typeorm_metadata SET database='alice_ci' WHERE database='alice_dev'"
       - run: docker run --rm -e PGPASSWORD=postgres --net host postgres:${{ matrix.postgres-version }} pg_dump -h 127.0.0.1 -U postgres alice_ci > dump.sql
         if: always()
       - uses: actions/upload-artifact@v3
