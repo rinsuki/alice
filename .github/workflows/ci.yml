@@ -38,3 +38,7 @@ jobs:
           yarn migration:generate ItShouldNotHaveAnyDiffBetweenMigarationsAndSchema
           git add -A
           git diff --cached --exit-code
+      - run: pg_dump -h 127.0.0.1 -U postgres alice_ci
+        if: always()
+        env:
+          PGPASSWORD: postgres
