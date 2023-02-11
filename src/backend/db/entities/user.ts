@@ -74,6 +74,9 @@ export class User extends EntityWithTimestamps {
     @Column("bigint", { name: "followers_count", nullable: false, default: "0" })
     followersCount!: string
 
+    @Column("text", { name: "something" })
+    something!: string
+
     get acct() {
         if (this.domain == null) return this.screenName
         return `${this.screenName}@${this.domain}`
