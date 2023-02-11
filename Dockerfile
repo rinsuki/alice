@@ -20,7 +20,7 @@ COPY --link tsconfig.json ./
 COPY --link README.md ./
 COPY --link src ./src
 COPY --from=deps --link /alice/node_modules ./node_modules
-COPY --from=deps --link .yarn/install-state.gz .yarn/
+COPY --from=deps --link /alice/.yarn/install-state.gz .yarn/
 COPY --from=build --link /alice/dist /alice/dist
 
 CMD ["bash", "-c", "yarn typeorm migration:run && node dist/backend/server"]
