@@ -38,5 +38,10 @@ jobs:
           yarn migration:generate ItShouldNotHaveAnyDiffBetweenMigarationsAndSchema
           git add -A
           git diff --cached --exit-code
-      - run: docker run --rm -e PGPASSWORD=postgres --net host postgres:15 pg_dump -h 127.0.0.1 -U postgres alice_ci
+      - run: docker run --rm -e PGPASSWORD=postgres --net host postgres:15 pg_dump -h 127.0.0.1 -U postgres alice_ci > dump.sql
         if: always()
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: dump.sql
+          path: dump.sql
