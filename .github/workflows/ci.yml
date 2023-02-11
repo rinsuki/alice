@@ -38,7 +38,7 @@ jobs:
       - run: yarn docker:typeorm migration:run
       # https://github.com/typeorm/typeorm/issues/9776
       - name: Workarounds for TypeORM
-        run: psql -h 127.0.0.1 -U postgres alice_ci "UPDATE typeorm_metadata SET database='alice_ci' WHERE database='alice_dev'"
+        run: psql -h 127.0.0.1 -U postgres alice_ci -c "UPDATE typeorm_metadata SET database=current_database() WHERE database='alice_dev'"
         env:
           PGPASSWORD: postgres
       - name: Check there is no diff between migrations and schema
