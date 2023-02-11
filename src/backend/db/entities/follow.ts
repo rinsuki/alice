@@ -18,6 +18,9 @@ export class Follow extends EntityWithTimestamps {
     @JoinColumn({ name: "from_user_id" })
     fromUser!: Relation<User>
 
+    @Column("bigint", { name: "from_user_id", nullable: false })
+    fromUserId!: string
+
     @ManyToOne(() => User, { nullable: false })
     @JoinColumn({ name: "to_user_id" })
     toUser!: Relation<User>

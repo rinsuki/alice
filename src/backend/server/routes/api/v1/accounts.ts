@@ -45,18 +45,29 @@ router.get("/relationships", async ctx => {
         id: In(ids),
     })
 
+    const following = await dataSource.getRepository(Follow).findBy({
+        fromUserId: token.user.id,
+        toUserId: In(ids),
+    })
+
+    const followedBy = await dataSource.getRepository(Follow).findBy({
+        fromUserId: In(ids),
+        toUserId: token.user.id,
+        accepted: true,
+    })
+
     // TODO: check relationships
     ctx.body = users.map(user => ({
-        id: user.id.toString(),
-        following: false,
+        id: user.id,
+        following: following.some(follow => follow.toUserId === user.id && follow.accepted),
         showing_reblogs: false,
         notifying: false,
-        followed_by: false,
+        followed_by: followedBy.some(follow => follow.fromUserId === user.id && follow.accepted),
         blocking: false,
         blocked_by: false,
         muting: false,
         muting_notifications: false,
-        requested: false,
+        requested: following.some(follow => follow.toUserId === user.id && !follow.accepted),
         domain_blocking: false,
         endorsed: false,
         note: "Project Alice: per-user note isn't implemented currently",
