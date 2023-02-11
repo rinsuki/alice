@@ -19,6 +19,7 @@ COPY --link .yarnrc.yml package.json yarn.lock ./
 COPY --link tsconfig.json ./
 COPY --link README.md ./
 COPY --link src ./src
+COPY --link resources ./resources
 COPY --from=deps --link /alice/node_modules ./node_modules
 COPY --from=deps --link /alice/.yarn/install-state.gz .yarn/
 COPY --from=build --link /alice/dist /alice/dist
