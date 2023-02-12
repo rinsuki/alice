@@ -4,7 +4,7 @@ import { z } from "zod"
 
 import { dataSource } from "../../db/data-source.js"
 import { User } from "../../db/entities/user.js"
-import { LOCAL_DOMAIN } from "../constants.js"
+import { LOCAL_DOMAIN } from "../environment.js"
 
 const router = new Router()
 

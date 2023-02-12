@@ -1,6 +1,6 @@
 import { Column, Entity, Index, OneToOne, PrimaryColumn } from "typeorm"
 
-import { LOCAL_DOMAIN } from "../../server/constants.js"
+import { LOCAL_DOMAIN } from "../../server/environment.js"
 import { EntityWithTimestamps } from "../utils/entity-with-timestamps.js"
 
 import { LocalUser } from "./local-user.js"

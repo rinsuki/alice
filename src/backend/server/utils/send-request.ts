@@ -1,6 +1,6 @@
 import got from "got"
 
-import { USER_AGENT } from "../constants.js"
+import { USER_AGENT } from "../environment.js"
 
 export const ourGot = got.extend({
     headers: {

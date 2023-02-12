@@ -1,13 +1,17 @@
-import jsonld from "jsonld"
-import { rootDir } from "../constants.js"
 import fs from "node:fs/promises"
+
+import jsonld from "jsonld"
+
+import { rootDir } from "../environment.js"
 
 import { ourGot } from "./send-request.js"
 
 const preloadedContexts = new Map<string, unknown>()
 
 const preloadStoreDir = rootDir + "/resources/jsonld-preload"
-for (const [url, fileName] of JSON.parse(await fs.readFile(preloadStoreDir + "/list.json", "utf-8"))) {
+for (const [url, fileName] of JSON.parse(
+    await fs.readFile(preloadStoreDir + "/list.json", "utf-8"),
+)) {
     const res = JSON.parse(await fs.readFile(preloadStoreDir + "/" + fileName, "utf-8"))
     preloadedContexts.set(url, Object.freeze(res))
 }

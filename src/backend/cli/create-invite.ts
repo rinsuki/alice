@@ -3,7 +3,8 @@ import { IsNull } from "typeorm"
 import { dataSource } from "../db/data-source.js"
 import { Invite } from "../db/entities/invite.js"
 import { User } from "../db/entities/user.js"
-import { LOCAL_DOMAIN, RE_SN_LOCAL } from "../server/constants.js"
+import { RE_SN_LOCAL } from "../server/constants.js"
+import { LOCAL_DOMAIN } from "../server/environment.js"
 import { emptyAsNull } from "../server/utils/empty-as-null.js"
 
 const invite = new Invite()

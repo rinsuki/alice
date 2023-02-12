@@ -1,14 +1,13 @@
-import got from "got"
 import { createHash } from "node:crypto"
 import fs from "node:fs/promises"
-import { rootDir } from "../server/constants.js"
 
-const urls = [
-    "https://www.w3.org/ns/activitystreams",
-    "https://w3id.org/security/v1",
-]
+import got from "got"
 
-let urlHash = new Map()
+import { rootDir } from "../server/environment.js"
+
+const urls = ["https://www.w3.org/ns/activitystreams", "https://w3id.org/security/v1"]
+
+const urlHash = new Map()
 const cacheStoreDir = rootDir + "/resources/jsonld-preload"
 
 for (const file of await fs.readdir(cacheStoreDir)) {

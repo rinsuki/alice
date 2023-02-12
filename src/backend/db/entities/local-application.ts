@@ -2,7 +2,7 @@ import { createHash } from "node:crypto"
 
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm"
 
-import { LOCAL_DOMAIN } from "../../server/constants.js"
+import { LOCAL_DOMAIN } from "../../server/environment.js"
 import { asyncRandomBytes } from "../../server/utils/async-random-bytes.js"
 import { generateSnowflakeID } from "../../server/utils/generate-snowflake.js"
 import { EntityWithTimestamps } from "../utils/entity-with-timestamps.js"

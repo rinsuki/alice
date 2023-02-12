@@ -3,7 +3,7 @@ import { IsNull } from "typeorm"
 
 import { dataSource } from "../../../../db/data-source.js"
 import { User } from "../../../../db/entities/user.js"
-import { LOCAL_DOMAIN, VERSION_ALICE, VERSION_MASTODON_COMPATIBLE } from "../../../constants.js"
+import { LOCAL_DOMAIN, VERSION_ALICE, VERSION_MASTODON_COMPATIBLE } from "../../../environment.js"
 
 const router = new Router()
 

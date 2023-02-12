@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react"
 
 import { Post } from "../../../../db/entities/post.js"
-import { siteName } from "../../../constants.js"
+import { siteName } from "../../../environment.js"
 import { safeURLOrNull } from "../../../utils/safe-url-or-null.js"
 
 export const PostPage: React.FC<{ post: Post; siteName: string }> = ({ post }) => {

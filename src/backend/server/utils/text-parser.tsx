@@ -8,6 +8,8 @@ import validUrlPrecedingChars from "twitter-text/dist/regexp/validUrlPrecedingCh
 import validUrlQueryChars from "twitter-text/dist/regexp/validUrlQueryChars.js"
 import validUrlQueryEndingChars from "twitter-text/dist/regexp/validUrlQueryEndingChars.js"
 
+import { A_REL } from "../constants.js"
+
 // urlRegex is Modified from Mastodon's source code:
 // https://github.com/mastodon/mastodon/blob/c812cfa667764ff3791fb5b5cd0dffc5ba2441da/app/javascript/mastodon/features/compose/util/url_regex.js
 
@@ -95,11 +97,8 @@ export function partsToHTML(parts: TextPart[]) {
                             return part
                         } else if (part.type === "url") {
                             return (
-                                <a
-                                    href={part.url}
-                                    target="_blank"
-                                    rel="nofollow noopener noreferrer"
-                                >
+                                // eslint-disable-next-line react/jsx-no-target-blank
+                                <a href={part.url} target="_blank" rel={A_REL}>
                                     {part.url}
                                 </a>
                             )
