@@ -7,6 +7,7 @@ import { dataSource } from "../../db/data-source.js"
 import { Follow } from "../../db/entities/follow.js"
 import { InboxLog } from "../../db/entities/inbox_log.js"
 import { LocalUser } from "../../db/entities/local-user.js"
+import { Notification } from "../../db/entities/notification.js"
 import { User } from "../../db/entities/user.js"
 import { addJob } from "../utils/add-job.js"
 import { generateSnowflakeID } from "../utils/generate-snowflake.js"
@@ -94,8 +95,16 @@ export async function apInboxInner(requestor: User, body: any) {
             })
             follow.toUser = await manager.getRepository(User).findOneOrFail({
                 where: { _uri: followBody.object },
+                relations: ["localUser"],
             })
             await manager.getRepository(Follow).insert(follow)
+            const notification = new Notification()
+            notification.id = (await generateSnowflakeID()).toString()
+            notification.type = "follow"
+            notification.receiver = follow.toUser.localUser!
+            notification.user = follow.fromUser
+            notification.follow = follow
+            await manager.getRepository(Notification).insert(notification)
             log.lastProcessedVersion = CURRENT_INBOX_PROCESSOR_VERSION
             if (!follow.toUser.manuallyApprovesFollowers) {
                 follow.accepted = true
