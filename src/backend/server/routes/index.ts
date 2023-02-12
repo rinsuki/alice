@@ -78,7 +78,16 @@ router.get("/@:userName", async ctx => {
         ctx.redirect("/users/id/" + user.id)
         return
     }
-    ctx.body = renderHTML(createElement(UserPage, { user, siteName }))
+    const posts = await dataSource.getRepository(Post).find({
+        where: {
+            userID: user.id,
+        },
+        relations: ["user", "application"],
+        order: {
+            id: "DESC",
+        },
+    })
+    ctx.body = renderHTML(createElement(UserPage, { user, siteName, posts }))
 })
 router.get("/@:userName/:postId", async ctx => {
     const { userName, postId } = z
