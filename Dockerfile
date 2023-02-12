@@ -4,6 +4,7 @@ FROM node:18 as deps
 WORKDIR /alice
 COPY --link .yarn ./.yarn
 COPY --link .yarnrc.yml package.json yarn.lock ./
+COPY --link shim ./shim
 RUN yarn install
 
 FROM deps as build
@@ -19,6 +20,7 @@ COPY --link .yarnrc.yml package.json yarn.lock ./
 COPY --link tsconfig.json ./
 COPY --link README.md ./
 COPY --link src ./src
+COPY --link shim ./shim
 COPY --link resources ./resources
 COPY --from=deps --link /alice/node_modules ./node_modules
 COPY --from=deps --link /alice/.yarn/install-state.gz .yarn/
