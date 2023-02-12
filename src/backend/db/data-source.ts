@@ -8,6 +8,7 @@ import { InboxLog } from "./entities/inbox_log.js"
 import { Invite } from "./entities/invite.js"
 import { LocalApplication } from "./entities/local-application.js"
 import { LocalUser } from "./entities/local-user.js"
+import { Notification } from "./entities/notification.js"
 import { OAuthAccessToken } from "./entities/oauth-access-token.js"
 import { OAuthAuthorizationCode } from "./entities/oauth-authorization-code.js"
 import { Post } from "./entities/post.js"
@@ -30,6 +31,7 @@ export const dataSource = new DataSource({
         OAuthAccessToken,
         Follow,
         InboxLog,
+        Notification,
     ],
     migrations:
         process.env.HAS_TS_NODE ?? "" ? [`${dn}/migrations/*.ts`] : [`${dn}/migrations/*.js`],
