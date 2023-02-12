@@ -1,22 +1,22 @@
-import { parseTextToHTML } from "./text-parser.js"
+import { textToHtml } from "./text-parser.js"
 
 describe("partsToHTML", () => {
     test("normal text", () => {
-        expect(parseTextToHTML("Hello, world")).toMatchInlineSnapshot('"<p>Hello, world</p>"')
+        expect(textToHtml("Hello, world")).toMatchInlineSnapshot('"<p>Hello, world</p>"')
     })
     test("br", () => {
-        expect(parseTextToHTML("Hello,\nworld")).toMatchInlineSnapshot('"<p>Hello,<br/>world</p>"')
+        expect(textToHtml("Hello,\nworld")).toMatchInlineSnapshot('"<p>Hello,<br/>world</p>"')
     })
     test("another p", () => {
-        expect(parseTextToHTML("Hello, world.\n\nIt should have a two p")).toMatchInlineSnapshot(
+        expect(textToHtml("Hello, world.\n\nIt should have a two p")).toMatchInlineSnapshot(
             '"<p>Hello, world.</p><p>It should have a two p</p>"',
         )
-        expect(parseTextToHTML("a\n\n")).toMatchInlineSnapshot('"<p>a</p>"')
-        expect(parseTextToHTML("\n\nb")).toMatchInlineSnapshot('"<p></p><p>b</p>"')
+        expect(textToHtml("a\n\n")).toMatchInlineSnapshot('"<p>a</p>"')
+        expect(textToHtml("\n\nb")).toMatchInlineSnapshot('"<p></p><p>b</p>"')
     })
     test("link", () => {
         expect(
-            parseTextToHTML(
+            textToHtml(
                 "Hellohttps://example.com 日本語のあとはリンクhttps://example.com\n改行のあともリンク\nhttps://example.com\n二重改行の後もp\n\nhttps://example.com",
             ),
         ).toMatchInlineSnapshot(

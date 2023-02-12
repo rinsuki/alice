@@ -9,6 +9,7 @@ import { LOCAL_DOMAIN } from "../../../constants.js"
 import { addJob } from "../../../utils/add-job.js"
 import { APIError } from "../../../utils/errors/api-error.js"
 import { generateSnowflakeID } from "../../../utils/generate-snowflake.js"
+import { textToHtml } from "../../../utils/text-parser.js"
 import { useBody } from "../../../utils/use-body.js"
 import { useToken } from "../../../utils/use-token.js"
 import { renderActivityPubPostActivity } from "../../../views/ap/post.js"
@@ -36,11 +37,7 @@ router.post("/", async ctx => {
     post.id = (await generateSnowflakeID()).toString()
     post.uri = `${token.user.uri}/statuses/${post.id}`
     post.url = `https://${LOCAL_DOMAIN}/@${token.user.screenName}/${post.id}`
-    let html = parsedBody.status
-    html = html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    html = html.replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br>")
-    html = `<p>${html}</p>`
-    post.html = html
+    post.html = textToHtml(parsedBody.status)
     post.user = token.user
     post.application = token.application
     post.spoiler = parsedBody.spoiler_text ?? ""

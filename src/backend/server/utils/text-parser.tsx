@@ -116,4 +116,4 @@ export function partsToHTML(parts: TextPart[]) {
     )
 }
 
-export const parseTextToHTML = (text: string) => partsToHTML(parseText(text))
+export const textToHtml = (text: string) => partsToHTML(parseText(text))
