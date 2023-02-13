@@ -77,7 +77,6 @@ router.post("/", async ctx => {
                 useSharedInbox: false,
             })
         }
-        throw new Error("oops failed")
     })
 
     ctx.body = renderAPIPost(post)
