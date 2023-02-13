@@ -26,4 +26,4 @@ COPY --from=deps --link /alice/node_modules ./node_modules
 COPY --from=deps --link /alice/.yarn/install-state.gz .yarn/
 COPY --from=build --link /alice/dist /alice/dist
 
-CMD ["bash", "-c", "yarn typeorm migration:run && node dist/backend/server"]
+CMD ["bash", "-c", "yarn docker:typeorm migration:run && node dist/backend/both.js"]
