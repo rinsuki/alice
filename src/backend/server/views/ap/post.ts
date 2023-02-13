@@ -15,6 +15,20 @@ export function renderActivityPubPostActivity(post: Post) {
     }
 }
 
+export function renderActivityPubPostDeleteActivity(post: Post) {
+    return {
+        "@context": ["https://www.w3.org/ns/activitystreams"],
+        "id": post.uri + "#delete",
+        "type": "Delete",
+        "actor": post.user.uri,
+        "to": [ACTIVITYSTREAMS_PUBLIC],
+        "object": {
+            id: post.uri,
+            type: "Tombstone",
+        },
+    }
+}
+
 export function renderActivityPubPost(post: Post) {
     const id = post.uri
 

@@ -1,4 +1,5 @@
 import { Router } from "piyo"
+import { IsNull, Not } from "typeorm"
 import { z } from "zod"
 
 import { dataSource } from "../../../../db/data-source.js"
@@ -12,7 +13,10 @@ import { generateSnowflakeID } from "../../../utils/generate-snowflake.js"
 import { textToHtml } from "../../../utils/text-parser.js"
 import { useBody } from "../../../utils/use-body.js"
 import { useToken } from "../../../utils/use-token.js"
-import { renderActivityPubPostActivity } from "../../../views/ap/post.js"
+import {
+    renderActivityPubPostActivity,
+    renderActivityPubPostDeleteActivity,
+} from "../../../views/ap/post.js"
 import { renderAPIPost } from "../../../views/api/post.js"
 
 const router = new Router()
@@ -106,6 +110,7 @@ router.delete("/:id", async ctx => {
     if (post.user.id !== token.user.id) throw new APIError(403, "Forbidden")
 
     await dataSource.transaction(async manager => {
+        if (manager.queryRunner == null) throw new Error("QUERY_RUNNER_MISSING")
         await manager.getRepository(Post).delete({
             id,
         })
@@ -116,6 +121,17 @@ router.delete("/:id", async ctx => {
             "postsCount",
             1,
         )
+        const users = await manager.getRepository(User).find({
+            where: { domain: Not(IsNull()) },
+        })
+        for (const user of users) {
+            await addJob(manager.queryRunner, "deliverV1", {
+                activity: renderActivityPubPostDeleteActivity(post),
+                senderUserId: token.user.id,
+                targetUserId: user.id,
+                useSharedInbox: true,
+            })
+        }
     })
     ctx.body = renderAPIPost(post) // ???
 })
