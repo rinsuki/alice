@@ -47,6 +47,7 @@ router.post("/", async ctx => {
     }
 
     await dataSource.transaction(async manager => {
+        if (manager.queryRunner == null) throw new Error("QUERY_RUNNER_MISSING")
         await manager.getRepository(Post).insert(post)
         await manager.getRepository(User).increment(
             {
@@ -55,26 +56,29 @@ router.post("/", async ctx => {
             "postsCount",
             1,
         )
-    })
-
-    // TODO: move this to job
-    // TODO: use shared inbox and dedup by shared inbox url
-    const followers = await dataSource.getRepository(Follow).find({
-        where: {
-            toUserId: token.user.id,
-            accepted: true,
-        },
-        relations: ["fromUser"],
-    })
-    console.log("publish to", followers)
-    for (const follower of followers) {
-        await addJob("deliverV1", {
-            activity: renderActivityPubPostActivity(post),
-            senderUserId: token.user.id,
-            targetUserId: follower.fromUser.id,
-            useSharedInbox: false,
+        const followers = await manager.getRepository(Follow).find({
+            where: {
+                toUserId: token.user.id,
+                accepted: true,
+            },
+            relations: ["fromUser"],
         })
-    }
+        console.log(
+            "publish to",
+            followers.map(f => f.fromUser.uri),
+        )
+        // TODO: move this to job
+        // TODO: use shared inbox and dedup by shared inbox url
+        for (const follower of followers) {
+            await addJob(manager.queryRunner, "deliverV1", {
+                activity: renderActivityPubPostActivity(post),
+                senderUserId: token.user.id,
+                targetUserId: follower.fromUser.id,
+                useSharedInbox: false,
+            })
+        }
+        throw new Error("oops failed")
+    })
 
     ctx.body = renderAPIPost(post)
 })

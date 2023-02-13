@@ -26,6 +26,7 @@ export async function apInboxInner(requestor: User, body: any) {
     if (actor !== requestor.uri) throw new Error("ACTOR_MISMATCH")
 
     await dataSource.transaction(async manager => {
+        if (manager.queryRunner == null) throw new Error("QUERY_RUNNER_MISSING")
         const log = new InboxLog()
         // console.log(body)
         log.id = (await generateSnowflakeID()).toString()
@@ -109,7 +110,7 @@ export async function apInboxInner(requestor: User, body: any) {
             if (!follow.toUser.manuallyApprovesFollowers) {
                 follow.accepted = true
                 await manager.save(follow)
-                await addJob("deliverV1", {
+                await addJob(manager.queryRunner, "deliverV1", {
                     senderUserId: follow.toUser.id,
                     targetUserId: follow.fromUser.id,
                     useSharedInbox: false,
