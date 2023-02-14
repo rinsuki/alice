@@ -12,7 +12,7 @@ router.get("/", async ctx => {
     const token = await useToken(ctx)
     if (token == null) throw new APIError(401, "Unauthorized")
     const notifications = await dataSource.getRepository(Notification).find({
-        relations: ["post", "user"],
+        relations: ["post", "post.user", "post.application", "user"],
     })
 
     ctx.body = notifications.map(notification => renderAPINotification(notification))

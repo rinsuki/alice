@@ -2,6 +2,7 @@ import { Check, Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typ
 
 import { EntityWithTimestamps } from "../utils/entity-with-timestamps.js"
 
+import { Favourite } from "./favourite.js"
 import { Follow } from "./follow.js"
 import { LocalUser } from "./local-user.js"
 import { Post } from "./post.js"
@@ -9,11 +10,11 @@ import { User } from "./user.js"
 
 export const allNotificationTypes = [
     "follow",
+    "favourite",
     // "follow_request",
     // "mention",
     // "status",
     // "reblog",
-    // "favourite",
     // "poll",
     // "update",
     // "admin.sign_up",
@@ -46,6 +47,10 @@ export class Notification extends EntityWithTimestamps {
     @ManyToOne(() => Follow, { nullable: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "follow_id" })
     follow?: Follow
+
+    @ManyToOne(() => Favourite, { nullable: true, onDelete: "CASCADE" })
+    @JoinColumn({ name: "favourite_id" })
+    favourite?: Favourite
 }
 
 // CHECK は名前をそのままにダウンタイムなしでルールのみを変更することができないので、
@@ -55,16 +60,18 @@ export class Notification extends EntityWithTimestamps {
 // エラーになった CHECK の名前で何かを判断したい時は、
 // `CHK:notification_type:${type}:` の prefix で判定するべきです。
 
-const idFields = ["user_id", "post_id", "follow_id"] as const
+const idFields = ["user_id", "post_id", "follow_id", "favourite_id"] as const
 
 const shortIdFields: Record<(typeof idFields)[number], string> = {
     user_id: "u",
     post_id: "p",
-    follow_id: "f",
+    follow_id: "fo",
+    favourite_id: "fa",
 }
 
 const checks: { [key in NotificationType]: (typeof idFields)[number][] } = {
     follow: ["user_id", "follow_id"],
+    favourite: ["user_id", "post_id", "favourite_id"],
 }
 
 for (const [type, shouldExistsIds] of Object.entries(checks)) {
