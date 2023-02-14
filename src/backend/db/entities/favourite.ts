@@ -15,6 +15,9 @@ export class Favourite extends EntityWithTimestamps {
     @JoinColumn({ name: "user_id" })
     user!: User
 
+    @Column("bigint", { nullable: false, name: "user_id" })
+    userId!: string
+
     @ManyToOne(() => Post, { nullable: false })
     @JoinColumn({ name: "post_id" })
     post!: Post

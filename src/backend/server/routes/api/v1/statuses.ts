@@ -6,6 +6,7 @@ import { dataSource } from "../../../../db/data-source.js"
 import { Follow } from "../../../../db/entities/follow.js"
 import { Post } from "../../../../db/entities/post.js"
 import { User } from "../../../../db/entities/user.js"
+import { createFavourite, removeFavourite } from "../../../../shared/services/favourite.js"
 import { LOCAL_DOMAIN } from "../../../environment.js"
 import { addJob } from "../../../utils/add-job.js"
 import { APIError } from "../../../utils/errors/api-error.js"
@@ -135,6 +136,36 @@ router.delete("/:id", async ctx => {
         }
     })
     ctx.body = await renderAPIPost(post, token.localUser) // ???
+})
+
+router.post("/:id/favourite", async ctx => {
+    const token = await useToken(ctx)
+    if (token == null) throw new APIError(401, "Unauthorized")
+    const { id } = z.object({ id: z.string() }).parse(ctx.params)
+    const post = await dataSource.getRepository(Post).findOne({
+        where: { id },
+        relations: ["user", "application"],
+    })
+    if (post == null) throw new APIError(404, "Not found")
+    await dataSource.transaction(async manager => {
+        await createFavourite(token.user, post, manager)
+    })
+    ctx.body = await renderAPIPost(post, token.localUser)
+})
+
+router.post("/:id/unfavourite", async ctx => {
+    const token = await useToken(ctx)
+    if (token == null) throw new APIError(401, "Unauthorized")
+    const { id } = z.object({ id: z.string() }).parse(ctx.params)
+    const post = await dataSource.getRepository(Post).findOne({
+        where: { id },
+        relations: ["user", "application"],
+    })
+    if (post == null) throw new APIError(404, "Not found")
+    await dataSource.transaction(async manager => {
+        await removeFavourite(token.user, post, manager)
+    })
+    ctx.body = await renderAPIPost(post, token.localUser)
 })
 
 export default router
