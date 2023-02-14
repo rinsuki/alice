@@ -35,4 +35,7 @@ export class Post extends EntityWithTimestamps {
     @ManyToOne(() => Application, { nullable: true })
     @JoinColumn({ name: "application_id" })
     application!: Application | null
+
+    @Column("int", { name: "favourites_count", default: 0 })
+    favouritesCount!: number
 }

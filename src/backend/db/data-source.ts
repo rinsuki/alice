@@ -3,6 +3,7 @@ import { dirname } from "node:path"
 import { DataSource } from "typeorm"
 
 import { Application } from "./entities/application.js"
+import { Favourite } from "./entities/favourite.js"
 import { Follow } from "./entities/follow.js"
 import { InboxLog } from "./entities/inbox_log.js"
 import { Invite } from "./entities/invite.js"
@@ -32,6 +33,7 @@ export const dataSource = new DataSource({
         Follow,
         InboxLog,
         Notification,
+        Favourite,
     ],
     migrations:
         process.env.HAS_TS_NODE ?? "" ? [`${dn}/migrations/*.ts`] : [`${dn}/migrations/*.js`],
