@@ -150,7 +150,13 @@ router.post("/:id/favourite", async ctx => {
     await dataSource.transaction(async manager => {
         await createFavourite(token.user, post, manager)
     })
-    ctx.body = await renderAPIPost(post, token.localUser)
+    ctx.body = await renderAPIPost(
+        await dataSource.getRepository(Post).findOneOrFail({
+            where: { id },
+            relations: ["user", "application"],
+        }),
+        token.localUser,
+    )
 })
 
 router.post("/:id/unfavourite", async ctx => {
@@ -165,7 +171,13 @@ router.post("/:id/unfavourite", async ctx => {
     await dataSource.transaction(async manager => {
         await removeFavourite(token.user, post, manager)
     })
-    ctx.body = await renderAPIPost(post, token.localUser)
+    ctx.body = await renderAPIPost(
+        await dataSource.getRepository(Post).findOneOrFail({
+            where: { id },
+            relations: ["user", "application"],
+        }),
+        token.localUser,
+    )
 })
 
 export default router

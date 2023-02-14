@@ -80,7 +80,7 @@ export async function renderAPIPosts<P extends Post[]>(
             sensitive: false,
             replies_count: -1,
             reblogs_count: -1,
-            favourites_count: -1,
+            favourites_count: post.favouritesCount,
             edited_at: null,
             reblog: null,
             media_attachments: [],

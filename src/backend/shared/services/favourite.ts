@@ -21,6 +21,7 @@ export async function createFavourite(
         favourite.user = user
         favourite.post = post
         await manager.insert(Favourite, favourite)
+        await manager.increment(Post, { id: post.id }, "favouritesCount", 1)
         const authorUser = await manager
             .getRepository(LocalUser)
             .findOne({ where: { userID: user.id } })
@@ -56,6 +57,7 @@ export async function removeFavourite(
         })
         if (favourite == null) return console.log("not exists", user.id, post.id)
         await manager.delete(Favourite, { id: favourite.id })
+        await manager.decrement(Post, { id: post.id }, "favouritesCount", 1)
         // notification should be automatically deleted by foreign key
     })
 }
