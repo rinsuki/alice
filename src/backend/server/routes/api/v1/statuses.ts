@@ -83,17 +83,18 @@ router.post("/", async ctx => {
         }
     })
 
-    ctx.body = renderAPIPost(post)
+    ctx.body = await renderAPIPost(post, token?.localUser)
 })
 
 router.get("/:id", async ctx => {
+    const token = await useToken(ctx)
     const { id } = z.object({ id: z.string() }).parse(ctx.params)
     const post = await dataSource.getRepository(Post).findOne({
         where: { id },
         relations: ["user", "application"],
     })
     if (post == null) throw new APIError(404, "Not found")
-    ctx.body = renderAPIPost(post)
+    ctx.body = await renderAPIPost(post, token?.localUser)
 })
 
 router.delete("/:id", async ctx => {
@@ -133,7 +134,7 @@ router.delete("/:id", async ctx => {
             })
         }
     })
-    ctx.body = renderAPIPost(post) // ???
+    ctx.body = await renderAPIPost(post, token.localUser) // ???
 })
 
 export default router

@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryColumn, Unique } from "typeorm"
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, Unique } from "typeorm"
 
 import { EntityWithTimestamps } from "../utils/entity-with-timestamps.js"
 
@@ -18,4 +18,7 @@ export class Favourite extends EntityWithTimestamps {
     @ManyToOne(() => Post, { nullable: false })
     @JoinColumn({ name: "post_id" })
     post!: Post
+
+    @Column("bigint", { nullable: false, name: "post_id" })
+    postId!: string
 }

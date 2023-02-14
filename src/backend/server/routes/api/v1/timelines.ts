@@ -12,6 +12,7 @@ import { renderAPIPosts } from "../../../views/api/post.js"
 const router = new Router()
 
 router.get("/public", async ctx => {
+    const token = await useToken(ctx)
     const posts = await dataSource.getRepository(Post).find({
         where: { visibility: "public" },
         order: {
@@ -20,7 +21,7 @@ router.get("/public", async ctx => {
         relations: ["user", "application"],
     })
 
-    ctx.body = renderAPIPosts(posts)
+    ctx.body = await renderAPIPosts(posts, token?.localUser)
 })
 
 router.get("/home", async ctx => {
@@ -46,7 +47,7 @@ router.get("/home", async ctx => {
         take: params.limit,
     })
 
-    ctx.body = renderAPIPosts(posts)
+    ctx.body = await renderAPIPosts(posts, token.localUser)
 })
 
 export default router

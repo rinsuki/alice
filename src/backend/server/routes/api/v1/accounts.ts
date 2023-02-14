@@ -112,6 +112,7 @@ router.get("/:id/followers", async ctx => {
 })
 
 router.get("/:id/statuses", async ctx => {
+    const token = await useToken(ctx)
     const query = z
         .object({
             pinned: z.string().optional(),
@@ -140,7 +141,7 @@ router.get("/:id/statuses", async ctx => {
         relations: ["application", "user"],
     })
 
-    ctx.body = renderAPIPosts(posts)
+    ctx.body = await renderAPIPosts(posts, token?.localUser)
 })
 
 export default router
