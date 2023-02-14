@@ -32,7 +32,7 @@ export class Notification extends EntityWithTimestamps {
     @JoinColumn({ name: "receiver_id" })
     receiver!: LocalUser
 
-    @Column("enum", { nullable: false, enum: allNotificationTypes })
+    @Column("character varying", { nullable: false, length: 32 })
     type!: NotificationType
 
     @ManyToOne(() => User, { nullable: true, onDelete: "CASCADE" })
@@ -76,7 +76,12 @@ for (const [type, shouldExistsIds] of Object.entries(checks)) {
     const shortShouldExistsIds = shouldExistsIds.map(id => shortIdFields[id]).join("")
     const shortShouldNotExistsIds = shouldNotExistsIds.map(id => shortIdFields[id]).join("")
     Check(
-        `CHK:notification_type:${type}:${shortShouldExistsIds}:${shortShouldNotExistsIds}`,
+        `CHK:notification_type:${type}:v2:${shortShouldExistsIds}:${shortShouldNotExistsIds}`,
         text,
     )(Notification)
 }
+
+Check(
+    `CHK:notification:type:v1:${allNotificationTypes.length}`,
+    allNotificationTypes.map(a => `type = '${a}'`).join(" OR "),
+)(Notification)
