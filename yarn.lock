@@ -1099,6 +1099,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/busboy@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@types/busboy@npm:1.5.0"
+  dependencies:
+    "@types/node": "*"
+  checksum: ffa7bf25c0395f6927526b7d97e70cd2df789e4ca0d231e41855fb08542fa236891ce457d83cc50cac6e5cef6be092ab80597070dcf1413f736462690a23e987
+  languageName: node
+  linkType: hard
+
 "@types/connect@npm:*":
   version: 3.4.35
   resolution: "@types/connect@npm:3.4.35"
@@ -1694,6 +1703,7 @@ __metadata:
     "@rinsuki/eslint-config": ^2.0.1
     "@rinsuki/prettier-config": ^1.5.0
     "@types/bcrypt": ^5.0.0
+    "@types/busboy": ^1.5.0
     "@types/jest": ^29.4.0
     "@types/jsonld": ^1.5.8
     "@types/koa-logger": ^3.1.2
@@ -1703,6 +1713,7 @@ __metadata:
     "@types/react-dom": ^18.0.10
     "@types/twitter-text": ^3.1.5
     bcrypt: ^5.1.0
+    busboy: ^1.6.0
     eslint: ^8.33.0
     got: ^12.5.3
     graphile-worker: ^0.13.0

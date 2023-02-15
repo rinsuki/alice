@@ -1,5 +1,7 @@
 import { IncomingMessage } from "node:http"
 
+import busboy from "busboy"
+
 const rawBodySymbol = Symbol("useBody.receivedRawBody")
 const parsedBodySymbol = Symbol("useBody.receivedParsedBody")
 
@@ -57,6 +59,21 @@ export async function useBody(
     }
     if (contentType === "application/x-www-form-urlencoded") {
         body = Object.fromEntries(new URLSearchParams(rawBody.toString()))
+    } else if (contentType.startsWith("multipart/form-data;")) {
+        const bb = busboy({
+            headers: ctx.req.headers,
+        })
+        const map = new Map<string, string>()
+        bb.on("field", (key, value) => {
+            map.set(key, value)
+        })
+        const p = new Promise<void>(resolve => {
+            bb.on("close", resolve)
+        })
+        bb.write(rawBody)
+        bb.end()
+        await p
+        body = Object.fromEntries(map)
     } else if (contentType.includes("/json") || contentType.includes("+json")) {
         body = JSON.parse(rawBody.toString())
     } else {
