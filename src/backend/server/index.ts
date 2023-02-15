@@ -41,7 +41,9 @@ app.useRouter("", router)
 
 const port = process.env.PORT ?? 3000
 
-await dataSource.initialize()
+if (!dataSource.isInitialized) {
+    await dataSource.initialize()
+}
 
 app.listen(port, () => {
     console.log(`Listen at http://localhost:${port}`)
