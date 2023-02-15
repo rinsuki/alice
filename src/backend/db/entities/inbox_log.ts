@@ -25,6 +25,14 @@ export class InboxLog extends EntityWithTimestamps {
     })
     type!: string
 
+    @Column({
+        name: "object_type",
+        generatedType: "STORED",
+        asExpression: "body->'object'->>'type'",
+        nullable: true,
+    })
+    objectType!: string
+
     @OneToOne(() => InboxLog, { nullable: true })
     @JoinColumn({ name: "was_undoed_by_inbox_log_id" })
     wasUndoedBy!: InboxLog | null
