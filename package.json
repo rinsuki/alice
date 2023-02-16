@@ -94,7 +94,12 @@
             "order": "asc"
           },
           "newlines-between": "always",
-          "pathGroups": [{"pattern": "@/**", "group": "internal"}]
+          "pathGroups": [
+            {
+              "pattern": "@/**",
+              "group": "internal"
+            }
+          ]
         }
       ]
     }
