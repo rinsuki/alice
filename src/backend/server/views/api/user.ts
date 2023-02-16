@@ -12,8 +12,8 @@ export function renderAPIUser(user: User) {
         followers_count: Number(user.followersCount),
         following_count: Number(user.followingCount),
         statuses_count: Number(user.postsCount),
+        note: user.note,
         // TODO: stub
-        note: "<p>Project Alice: noteはまだ未実装</p>",
         locked: false,
         avatar: `https://${LOCAL_DOMAIN}/avatars/original/missing.png`,
         avatar_static: `https://${LOCAL_DOMAIN}/avatars/original/missing.png`,

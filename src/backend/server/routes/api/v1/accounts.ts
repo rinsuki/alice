@@ -6,8 +6,11 @@ import { dataSource } from "../../../../db/data-source.js"
 import { Follow } from "../../../../db/entities/follow.js"
 import { Post } from "../../../../db/entities/post.js"
 import { User } from "../../../../db/entities/user.js"
+import { updateLocalUserProfile } from "../../../../shared/services/user.js"
 import { APIError } from "../../../utils/errors/api-error.js"
+import { useBody } from "../../../utils/use-body.js"
 import { useToken } from "../../../utils/use-token.js"
+import { renderAPILocalUser } from "../../../views/api/local-user.js"
 import { renderAPIPosts } from "../../../views/api/post.js"
 import { renderAPIUser } from "../../../views/api/user.js"
 
@@ -19,12 +22,7 @@ router.get("/verify_credentials", async ctx => {
 
     ctx.body = {
         ...renderAPIUser(token.user),
-        source: {
-            privacy: "public",
-            sensitive: false,
-            language: "",
-            note: "Project Alice: Stub",
-        },
+        source: renderAPILocalUser(token.localUser),
     }
 })
 
@@ -85,6 +83,26 @@ router.get("/lookup", async ctx => {
     if (user == null) throw new APIError(404, "Record not found")
 
     ctx.body = renderAPIUser(user)
+})
+
+router.patch("/update_credentials", async ctx => {
+    const token = await useToken(ctx)
+    if (token == null) throw new APIError(401, "Unauthorized")
+    const params = z
+        .object({
+            display_name: z.string().optional(),
+            note: z.string().optional(),
+        })
+        .parse(await useBody(ctx))
+    const user = await updateLocalUserProfile(token.localUser, {
+        displayName: params.display_name,
+        note: params.note,
+    })
+
+    ctx.body = {
+        ...renderAPIUser(user),
+        source: renderAPILocalUser(token.localUser),
+    }
 })
 
 router.get("/:id", async ctx => {

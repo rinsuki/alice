@@ -26,8 +26,7 @@ export function renderActivityPubUser(user: User) {
         "endpoints": {
             sharedInbox: user.sharedInboxURL ?? undefined,
         },
-        // stub
-        "summary": "<p>Project Alice User (stub)</p>",
+        "summary": user.note,
     }
 }
 

@@ -40,6 +40,9 @@ export class LocalUser {
     })
     useScreenNameAsObjectID!: boolean
 
+    @Column("text", { name: "source_note", nullable: false, default: "" })
+    sourceNote!: string
+
     uri(user: User) {
         if (this.user != null && this.user.id !== user.id)
             throw new Error("USER_MISMATCH_ON_LOCAL_USER_URI")
