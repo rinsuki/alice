@@ -1,6 +1,7 @@
+import { IsNull } from "typeorm"
+
 import { LOCAL_DOMAIN } from "@/backend/shared/environment.js"
 import { emptyAsNull } from "@/backend/shared/utils/empty-as-null.js"
-import { IsNull } from "typeorm"
 
 import { dataSource } from "../db/data-source.js"
 import { Invite } from "../db/entities/invite.js"

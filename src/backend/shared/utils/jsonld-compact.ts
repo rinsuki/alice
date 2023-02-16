@@ -38,6 +38,7 @@ export async function jsonLDCompact(document: any) {
                 const cached = preloadedContexts.get(url)
                 if (cached != null) {
                     return {
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                         document: cached as any,
                         documentUrl: url,
                     }

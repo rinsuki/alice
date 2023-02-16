@@ -54,4 +54,5 @@ jobs:
         with:
           name: dump.sql
           path: dump.sql
+      - run: yarn lint
       - run: yarn jest --ci --runInBand --coverage

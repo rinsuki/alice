@@ -1,5 +1,6 @@
-import { User } from "@/backend/db/entities/user.js"
 import { IsNull, Not, QueryRunner } from "typeorm"
+
+import { User } from "@/backend/db/entities/user.js"
 
 import { addJob } from "./add-job.js"
 
