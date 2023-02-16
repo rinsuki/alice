@@ -1,4 +1,4 @@
-import { LocalUser } from "../../../db/entities/local-user.js"
+import { LocalUser } from "@/backend/db/entities/local-user.js"
 
 /** "source" property of verify_credentials / update_credentials */
 export function renderAPILocalUser(localUser: LocalUser) {

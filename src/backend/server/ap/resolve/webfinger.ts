@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { ourGot } from "../../utils/send-request.js"
+import { ourGot } from "@/backend/shared/utils/send-request.js"
 
 const zWebfingerRes = z.object({
     subject: z.string(),

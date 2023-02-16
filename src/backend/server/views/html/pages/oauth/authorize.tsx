@@ -1,6 +1,6 @@
 import React from "react"
 
-import { LocalApplication } from "../../../../../db/entities/local-application.js"
+import { LocalApplication } from "@/backend/db/entities/local-application.js"
 
 export const OAuthAuthorizePage: React.FC<{
     app: LocalApplication

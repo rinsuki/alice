@@ -1,11 +1,12 @@
 import { ContextFromRouter, Router } from "piyo"
 import { z } from "zod"
 
-import { dataSource } from "../../db/data-source.js"
-import { Post } from "../../db/entities/post.js"
-import { User } from "../../db/entities/user.js"
+import { dataSource } from "@/backend/db/data-source.js"
+import { Post } from "@/backend/db/entities/post.js"
+import { User } from "@/backend/db/entities/user.js"
+import { MIME_ACTIVITY_JSON_UTF_8 } from "@/backend/shared/constants.js"
+
 import { apInbox } from "../ap/inbox.js"
-import { MIME_ACTIVITY_JSON_UTF_8 } from "../constants.js"
 import { renderActivityPubPost } from "../views/ap/post.js"
 import { renderActivityPubUser, renderActivityPubUserOutbox } from "../views/ap/user.js"
 

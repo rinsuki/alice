@@ -1,6 +1,6 @@
 import React from "react"
 
-import { Invite } from "../../../../db/entities/invite.js"
+import { Invite } from "@/backend/db/entities/invite.js"
 
 export const InvitePage: React.FC<{
     siteName: string

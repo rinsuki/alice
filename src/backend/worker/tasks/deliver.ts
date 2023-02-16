@@ -2,9 +2,10 @@ import { createHash, createSign } from "node:crypto"
 
 import { Task } from "graphile-worker"
 
-import { dataSource } from "../../db/data-source.js"
-import { User } from "../../db/entities/user.js"
-import { ourGot } from "../../server/utils/send-request.js"
+import { dataSource } from "@/backend/db/data-source.js"
+import { User } from "@/backend/db/entities/user.js"
+import { ourGot } from "@/backend/shared/utils/send-request.js"
+
 import { queueSchema } from "../schema.js"
 
 export const deliverV1: Task = async (rawPayload, helpers) => {

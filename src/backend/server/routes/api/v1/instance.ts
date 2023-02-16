@@ -1,9 +1,13 @@
 import { Router } from "piyo"
 import { IsNull } from "typeorm"
 
-import { dataSource } from "../../../../db/data-source.js"
-import { User } from "../../../../db/entities/user.js"
-import { LOCAL_DOMAIN, VERSION_ALICE, VERSION_MASTODON_COMPATIBLE } from "../../../environment.js"
+import { dataSource } from "@/backend/db/data-source.js"
+import { User } from "@/backend/db/entities/user.js"
+import {
+    LOCAL_DOMAIN,
+    VERSION_ALICE,
+    VERSION_MASTODON_COMPATIBLE,
+} from "@/backend/shared/environment.js"
 
 const router = new Router()
 

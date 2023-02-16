@@ -1,11 +1,11 @@
+import { LOCAL_DOMAIN } from "@/backend/shared/environment.js"
+import { emptyAsNull } from "@/backend/shared/utils/empty-as-null.js"
 import { IsNull } from "typeorm"
 
 import { dataSource } from "../db/data-source.js"
 import { Invite } from "../db/entities/invite.js"
 import { User } from "../db/entities/user.js"
-import { RE_SN_LOCAL } from "../server/constants.js"
-import { LOCAL_DOMAIN } from "../server/environment.js"
-import { emptyAsNull } from "../server/utils/empty-as-null.js"
+import { RE_SN_LOCAL } from "../shared/constants.js"
 
 const invite = new Invite()
 invite.screenName = emptyAsNull(process.env.ALICE_INVITE_SCREEN_NAME) ?? null

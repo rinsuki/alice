@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react"
 
-import { Post } from "../../../../db/entities/post.js"
-import { siteName } from "../../../environment.js"
-import { safeURLOrNull } from "../../../utils/safe-url-or-null.js"
+import { Post } from "@/backend/db/entities/post.js"
+import { siteName } from "@/backend/shared/environment.js"
+import { safeURLOrNull } from "@/backend/shared/utils/safe-url-or-null.js"
 
 export const PostPage: React.FC<{ post: Post; siteName: string }> = ({ post }) => {
     const attachments: ReactNode[] = [post.createdAt.toISOString()]

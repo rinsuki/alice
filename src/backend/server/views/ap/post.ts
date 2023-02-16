@@ -1,5 +1,5 @@
-import { Post } from "../../../db/entities/post.js"
-import { ACTIVITYSTREAMS_PUBLIC } from "../../constants.js"
+import { Post } from "@/backend/db/entities/post.js"
+import { ACTIVITYSTREAMS_PUBLIC } from "@/backend/shared/constants.js"
 
 export function renderActivityPubPostActivity(post: Post) {
     const note = renderActivityPubPost(post)

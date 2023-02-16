@@ -1,8 +1,9 @@
 import { EntityManager } from "typeorm"
 
-import { dataSource } from "../../db/data-source.js"
-import { Notification } from "../../db/entities/notification.js"
-import { generateSnowflakeID } from "../../server/utils/generate-snowflake.js"
+import { dataSource } from "@/backend/db/data-source.js"
+import { Notification } from "@/backend/db/entities/notification.js"
+
+import { generateSnowflakeID } from "../utils/generate-snowflake.js"
 
 export async function createNotification(
     notificationParams: Omit<Notification, "id" | "createdAt" | "updatedAt">,

@@ -1,13 +1,13 @@
 import { z } from "zod"
 
-import { dataSource } from "../../../db/data-source.js"
-import { User } from "../../../db/entities/user.js"
-import { checkMimeIsActivityJson, RE_SN_REMOTE } from "../../constants.js"
-import { generateSnowflakeID } from "../../utils/generate-snowflake.js"
-import { jsonLDCompact } from "../../utils/jsonld-compact.js"
-import { normalizeHost } from "../../utils/normalize-host.js"
-import { parseAcctUrl } from "../../utils/parse-acct-url.js"
-import { zJsonLdValue } from "../../utils/z-jsonld-value.js"
+import { dataSource } from "@/backend/db/data-source.js"
+import { User } from "@/backend/db/entities/user.js"
+import { checkMimeIsActivityJson, RE_SN_REMOTE } from "@/backend/shared/constants.js"
+import { generateSnowflakeID } from "@/backend/shared/utils/generate-snowflake.js"
+import { jsonLDCompact } from "@/backend/shared/utils/jsonld-compact.js"
+import { normalizeHost } from "@/backend/shared/utils/normalize-host.js"
+import { parseAcctUrl } from "@/backend/shared/utils/parse-acct-url.js"
+import { zJsonLdValue } from "@/backend/shared/utils/z-jsonld-value.js"
 
 import { resolveWebfinger } from "./webfinger.js"
 

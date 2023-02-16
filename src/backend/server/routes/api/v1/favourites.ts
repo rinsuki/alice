@@ -1,10 +1,10 @@
 import { Router } from "piyo"
 
-import { dataSource } from "../../../../db/data-source.js"
-import { Favourite } from "../../../../db/entities/favourite.js"
-import { JSONError } from "../../../utils/errors/json-error.js"
-import { useToken } from "../../../utils/use-token.js"
-import { renderAPIPosts } from "../../../views/api/post.js"
+import { dataSource } from "@/backend/server/../db/data-source.js"
+import { Favourite } from "@/backend/server/../db/entities/favourite.js"
+import { JSONError } from "@/backend/server/utils/errors/json-error.js"
+import { useToken } from "@/backend/server/utils/use-token.js"
+import { renderAPIPosts } from "@/backend/server/views/api/post.js"
 
 const router = new Router()
 

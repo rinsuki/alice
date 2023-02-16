@@ -1,5 +1,5 @@
-import { User } from "../../../db/entities/user.js"
-import { LOCAL_DOMAIN } from "../../environment.js"
+import { User } from "@/backend/db/entities/user.js"
+import { LOCAL_DOMAIN } from "@/backend/shared/environment.js"
 
 export function renderAPIUser(user: User) {
     return {

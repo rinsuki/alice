@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react"
 
-import { Post } from "../../../../db/entities/post.js"
-import { User } from "../../../../db/entities/user.js"
-import { safeURLOrNull } from "../../../utils/safe-url-or-null.js"
+import { Post } from "@/backend/db/entities/post.js"
+import { User } from "@/backend/db/entities/user.js"
+import { safeURLOrNull } from "@/backend/shared/utils/safe-url-or-null.js"
 
 const PostComponent: React.FC<{ post: Post }> = ({ post }) => {
     const attachments: ReactNode[] = [

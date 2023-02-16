@@ -2,8 +2,8 @@ import { createHash } from "node:crypto"
 
 import { ContextFromRouter, Router } from "piyo"
 
-import { dataSource } from "../../db/data-source.js"
-import { OAuthAccessToken } from "../../db/entities/oauth-access-token.js"
+import { dataSource } from "@/backend/db/data-source.js"
+import { OAuthAccessToken } from "@/backend/db/entities/oauth-access-token.js"
 
 const router = new Router()
 

@@ -1,6 +1,6 @@
 import { ContextFromRouter, Router } from "piyo"
 
-import { asyncRandomBytes } from "./async-random-bytes.js"
+import { asyncRandomBytes } from "@/backend/shared/utils/async-random-bytes.js"
 
 const CSRF_COOKIE_NAME = "alice.csrf"
 const CSRF_BYTES = 32

@@ -12,7 +12,9 @@ const preloadStoreDir = rootDir + "/resources/jsonld-preload"
 for (const [url, fileName] of JSON.parse(
     await fs.readFile(preloadStoreDir + "/list.json", "utf-8"),
 )) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/restrict-plus-operands
     const res = JSON.parse(await fs.readFile(preloadStoreDir + "/" + fileName, "utf-8"))
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     preloadedContexts.set(url, Object.freeze(res))
 }
 

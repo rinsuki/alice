@@ -1,7 +1,7 @@
+import { User } from "@/backend/db/entities/user.js"
 import { IsNull, Not, QueryRunner } from "typeorm"
 
-import { User } from "../../db/entities/user.js"
-import { addJob } from "../../server/utils/add-job.js"
+import { addJob } from "./add-job.js"
 
 export async function deliverToEveryone(queryRunner: QueryRunner, actor: User, activity: unknown) {
     const users = await queryRunner.manager.getRepository(User).find({

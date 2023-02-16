@@ -1,9 +1,8 @@
 import { createHash } from "node:crypto"
 import fs from "node:fs/promises"
 
+import { rootDir } from "@/backend/shared/environment.js"
 import got from "got"
-
-import { rootDir } from "../server/environment.js"
 
 const urls = ["https://www.w3.org/ns/activitystreams", "https://w3id.org/security/v1"]
 

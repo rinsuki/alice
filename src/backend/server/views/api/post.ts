@@ -1,11 +1,10 @@
 import { In } from "typeorm"
 
-import { dataSource } from "../../../db/data-source.js"
-import { Favourite } from "../../../db/entities/favourite.js"
-import { LocalUser } from "../../../db/entities/local-user.js"
-import { Post } from "../../../db/entities/post.js"
-import { mapKeepLength } from "../../utils/map-keep-length.js"
-import { arrayToMapById } from "../../utils/render-and-array-to-map-by-id.js"
+import { dataSource } from "@/backend/db/data-source.js"
+import { Favourite } from "@/backend/db/entities/favourite.js"
+import { LocalUser } from "@/backend/db/entities/local-user.js"
+import { Post } from "@/backend/db/entities/post.js"
+import { arrayToMapById } from "@/backend/server/utils/array-to-map-by-id.js"
 
 import { renderAPIUser } from "./user.js"
 
@@ -63,7 +62,7 @@ export async function renderAPIPosts<P extends Post[]>(
                   ),
               }
             : undefined
-    return mapKeepLength(posts, post => {
+    return posts.map(post => {
         const unauthorizedPart = {
             id: post.id.toString(),
             created_at: post.createdAt.toISOString(),

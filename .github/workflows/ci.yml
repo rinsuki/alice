@@ -34,7 +34,7 @@ jobs:
         with:
           node-version: 18
       - run: yarn install
-      - run: yarn tsc
+      - run: yarn build
       - run: yarn docker:typeorm migration:run
       # https://github.com/typeorm/typeorm/issues/9776
       - name: Workarounds for TypeORM

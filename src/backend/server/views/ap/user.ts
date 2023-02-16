@@ -1,6 +1,6 @@
-import { dataSource } from "../../../db/data-source.js"
-import { Post } from "../../../db/entities/post.js"
-import { User } from "../../../db/entities/user.js"
+import { dataSource } from "@/backend/db/data-source.js"
+import { Post } from "@/backend/db/entities/post.js"
+import { User } from "@/backend/db/entities/user.js"
 
 import { renderActivityPubPost } from "./post.js"
 

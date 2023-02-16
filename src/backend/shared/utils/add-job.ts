@@ -2,7 +2,7 @@ import { Job, TaskSpec } from "graphile-worker"
 import { QueryRunner } from "typeorm"
 import { z } from "zod"
 
-import { queueSchema } from "../../worker/schema.js"
+import { queueSchema } from "@/backend/worker/schema.js"
 
 const query = `SELECT * FROM graphile_worker.add_job(
     identifier => $1::text,

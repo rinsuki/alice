@@ -3,9 +3,10 @@ import { createHash, createVerify } from "node:crypto"
 import { HTTPError } from "got"
 import { ContextFromRouter, Router } from "piyo"
 
-import { dataSource } from "../../db/data-source.js"
-import { User } from "../../db/entities/user.js"
-import { isNotNull } from "../utils/is-not-null.js"
+import { dataSource } from "@/backend/db/data-source.js"
+import { User } from "@/backend/db/entities/user.js"
+import { isNotNull } from "@/backend/shared/utils/is-not-null.js"
+
 import { StringParser } from "../utils/string-reader.js"
 import { useRawBody } from "../utils/use-body.js"
 

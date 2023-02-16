@@ -4,7 +4,7 @@ import { promisify } from "node:util"
 import bcrypt from "bcrypt"
 import { Check, Column, Entity, JoinColumn, OneToOne, PrimaryColumn, Relation } from "typeorm"
 
-import { LOCAL_DOMAIN } from "../../server/environment.js"
+import { LOCAL_DOMAIN } from "@/backend/shared/environment.js"
 
 import { Invite } from "./invite.js"
 import { User } from "./user.js"

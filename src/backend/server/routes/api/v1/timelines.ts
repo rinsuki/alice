@@ -2,12 +2,12 @@ import { Router } from "piyo"
 import { In } from "typeorm"
 import { z } from "zod"
 
-import { dataSource } from "../../../../db/data-source.js"
-import { Post } from "../../../../db/entities/post.js"
-import { APIError } from "../../../utils/errors/api-error.js"
-import { useToken } from "../../../utils/use-token.js"
-import { zNumberString } from "../../../utils/z-number-string.js"
-import { renderAPIPosts } from "../../../views/api/post.js"
+import { dataSource } from "@/backend/db/data-source.js"
+import { Post } from "@/backend/db/entities/post.js"
+import { APIError } from "@/backend/server/utils/errors/api-error.js"
+import { useToken } from "@/backend/server/utils/use-token.js"
+import { renderAPIPosts } from "@/backend/server/views/api/post.js"
+import { zNumberString } from "@/backend/shared/utils/z-number-string.js"
 
 const router = new Router()
 

@@ -1,11 +1,12 @@
 import { EntityManager } from "typeorm"
 
-import { dataSource } from "../../db/data-source.js"
-import { Favourite } from "../../db/entities/favourite.js"
-import { LocalUser } from "../../db/entities/local-user.js"
-import { Post } from "../../db/entities/post.js"
-import { User } from "../../db/entities/user.js"
-import { generateSnowflakeID } from "../../server/utils/generate-snowflake.js"
+import { dataSource } from "@/backend/db/data-source.js"
+import { Favourite } from "@/backend/db/entities/favourite.js"
+import { LocalUser } from "@/backend/db/entities/local-user.js"
+import { Post } from "@/backend/db/entities/post.js"
+import { User } from "@/backend/db/entities/user.js"
+
+import { generateSnowflakeID } from "../utils/generate-snowflake.js"
 
 import { createNotification } from "./notification.js"
 

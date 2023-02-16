@@ -1,11 +1,12 @@
-import { dataSource } from "../../db/data-source.js"
-import { LocalUser } from "../../db/entities/local-user.js"
-import { User } from "../../db/entities/user.js"
-import { ACTIVITYSTREAMS_PUBLIC } from "../../server/constants.js"
-import { generateSnowflakeID } from "../../server/utils/generate-snowflake.js"
-import { textToHtml } from "../../server/utils/text-parser.js"
-import { renderActivityPubUser } from "../../server/views/ap/user.js"
+import { dataSource } from "@/backend/db/data-source.js"
+import { LocalUser } from "@/backend/db/entities/local-user.js"
+import { User } from "@/backend/db/entities/user.js"
+import { textToHtml } from "@/backend/server/utils/text-parser.js"
+import { renderActivityPubUser } from "@/backend/server/views/ap/user.js"
+
+import { ACTIVITYSTREAMS_PUBLIC } from "../constants.js"
 import { deliverToEveryone } from "../utils/deliver-to-everyone.js"
+import { generateSnowflakeID } from "../utils/generate-snowflake.js"
 
 export async function updateLocalUserProfile(
     localUser: LocalUser,

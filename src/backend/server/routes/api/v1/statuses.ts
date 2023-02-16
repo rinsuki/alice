@@ -1,24 +1,24 @@
 import { Router } from "piyo"
 import { z } from "zod"
 
-import { dataSource } from "../../../../db/data-source.js"
-import { Follow } from "../../../../db/entities/follow.js"
-import { Post } from "../../../../db/entities/post.js"
-import { User } from "../../../../db/entities/user.js"
-import { createFavourite, removeFavourite } from "../../../../shared/services/favourite.js"
-import { deliverToEveryone } from "../../../../shared/utils/deliver-to-everyone.js"
-import { LOCAL_DOMAIN } from "../../../environment.js"
-import { addJob } from "../../../utils/add-job.js"
-import { APIError } from "../../../utils/errors/api-error.js"
-import { generateSnowflakeID } from "../../../utils/generate-snowflake.js"
-import { textToHtml } from "../../../utils/text-parser.js"
-import { useBody } from "../../../utils/use-body.js"
-import { useToken } from "../../../utils/use-token.js"
+import { dataSource } from "@/backend/db/data-source.js"
+import { Follow } from "@/backend/db/entities/follow.js"
+import { Post } from "@/backend/db/entities/post.js"
+import { User } from "@/backend/db/entities/user.js"
+import { APIError } from "@/backend/server/utils/errors/api-error.js"
+import { textToHtml } from "@/backend/server/utils/text-parser.js"
+import { useBody } from "@/backend/server/utils/use-body.js"
+import { useToken } from "@/backend/server/utils/use-token.js"
 import {
     renderActivityPubPostActivity,
     renderActivityPubPostDeleteActivity,
-} from "../../../views/ap/post.js"
-import { renderAPIPost } from "../../../views/api/post.js"
+} from "@/backend/server/views/ap/post.js"
+import { renderAPIPost } from "@/backend/server/views/api/post.js"
+import { LOCAL_DOMAIN } from "@/backend/shared/environment.js"
+import { createFavourite, removeFavourite } from "@/backend/shared/services/favourite.js"
+import { addJob } from "@/backend/shared/utils/add-job.js"
+import { deliverToEveryone } from "@/backend/shared/utils/deliver-to-everyone.js"
+import { generateSnowflakeID } from "@/backend/shared/utils/generate-snowflake.js"
 
 const router = new Router()
 

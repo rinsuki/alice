@@ -8,7 +8,7 @@ import validUrlPrecedingChars from "twitter-text/dist/regexp/validUrlPrecedingCh
 import validUrlQueryChars from "twitter-text/dist/regexp/validUrlQueryChars.js"
 import validUrlQueryEndingChars from "twitter-text/dist/regexp/validUrlQueryEndingChars.js"
 
-import { A_REL } from "../constants.js"
+import { A_REL } from "@/backend/shared/constants.js"
 
 // urlRegex is Modified from Mastodon's source code:
 // https://github.com/mastodon/mastodon/blob/c812cfa667764ff3791fb5b5cd0dffc5ba2441da/app/javascript/mastodon/features/compose/util/url_regex.js

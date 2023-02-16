@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm"
 
-import { asyncRandomBytes } from "../../server/utils/async-random-bytes.js"
+import { asyncRandomBytes } from "@/backend/shared/utils/async-random-bytes.js"
+
 import { EntityWithTimestamps } from "../utils/entity-with-timestamps.js"
 
 import { LocalApplication } from "./local-application.js"

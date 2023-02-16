@@ -11,7 +11,7 @@ FROM deps as build
 
 COPY --link tsconfig.json ./
 COPY --link src ./src
-RUN yarn tsc
+RUN yarn build
 
 FROM node:18-slim
 WORKDIR /alice

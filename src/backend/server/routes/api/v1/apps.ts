@@ -1,11 +1,11 @@
 import { Router } from "piyo"
 import { z } from "zod"
 
-import { dataSource } from "../../../../db/data-source.js"
-import { Application } from "../../../../db/entities/application.js"
-import { LocalApplication } from "../../../../db/entities/local-application.js"
-import { JSONError } from "../../../utils/errors/json-error.js"
-import { useBody } from "../../../utils/use-body.js"
+import { dataSource } from "@/backend/db/data-source.js"
+import { Application } from "@/backend/db/entities/application.js"
+import { LocalApplication } from "@/backend/db/entities/local-application.js"
+import { JSONError } from "@/backend/server/utils/errors/json-error.js"
+import { useBody } from "@/backend/server/utils/use-body.js"
 
 const router = new Router()
 

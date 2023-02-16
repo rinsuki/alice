@@ -1,7 +1,7 @@
-import { LocalUser } from "../../../db/entities/local-user.js"
-import { Notification } from "../../../db/entities/notification.js"
-import { isNotNull } from "../../utils/is-not-null.js"
-import { arrayToMapById } from "../../utils/render-and-array-to-map-by-id.js"
+import { LocalUser } from "@/backend/db/entities/local-user.js"
+import { Notification } from "@/backend/db/entities/notification.js"
+import { arrayToMapById } from "@/backend/server/utils/array-to-map-by-id.js"
+import { isNotNull } from "@/backend/shared/utils/is-not-null.js"
 
 import { renderAPIPosts } from "./post.js"
 import { renderAPIUser } from "./user.js"

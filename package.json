@@ -7,13 +7,13 @@
   "scripts": {
     "lint": "eslint .",
     "fix": "eslint --fix ",
+    "build": "tsc && tsc-alias",
     "invite:create": "node dist/backend/cli/create-invite.js",
     "docker:typeorm": "typeorm -d dist/backend/db/data-source.js",
     "typeorm": "HAS_TS_NODE=1 typeorm-ts-node-esm -d src/backend/db/data-source.ts",
     "migrate": "HAS_TS_NODE=1 typeorm-ts-node-esm migration:run -d src/backend/db/data-source.ts",
     "migration:create": "cd src/backend/db/migrations && typeorm-ts-node-esm migration:create",
-    "migration:generate": "cd src/backend/db/migrations && HAS_TS_NODE=1 typeorm-ts-node-esm migration:generate -d ../data-source.ts -p",
-    "migration:revert": "HAS_TS_NODE=1 typeorm-ts-node-esm migration:revert -d src/backend/db/data-source.ts"
+    "migration:generate": "cd src/backend/db/migrations && HAS_TS_NODE=1 typeorm-ts-node-esm migration:generate -d ../data-source.ts -p"
   },
   "dependencies": {
     "@peertube/http-signature": "^1.7.0",
@@ -39,7 +39,7 @@
     "twitter-text/core-js": "link:./shim/core-js"
   },
   "devDependencies": {
-    "@rinsuki/eslint-config": "^2.0.1",
+    "@rinsuki/eslint-config": "^2.1.0",
     "@rinsuki/prettier-config": "^1.5.0",
     "@types/bcrypt": "^5.0.0",
     "@types/busboy": "^1.5.0",
@@ -56,6 +56,7 @@
     "prettier": "^2.8.3",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
+    "tsc-alias": "^1.8.2",
     "typescript": "^4.9.4"
   },
   "packageManager": "yarn@3.2.1",
@@ -67,6 +68,34 @@
     "parserOptions": {
       "project": [
         "./tsconfig.json"
+      ]
+    },
+    "rules": {
+      "no-restricted-imports": [
+        "error",
+        {
+          "patterns": [
+            "../../*"
+          ]
+        }
+      ],
+      "import/order": [
+        "warn",
+        {
+          "groups": [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index"
+          ],
+          "alphabetize": {
+            "order": "asc"
+          },
+          "newlines-between": "always",
+          "pathGroups": [{"pattern": "@/**", "group": "internal"}]
+        }
       ]
     }
   }
