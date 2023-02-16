@@ -1,5 +1,4 @@
 import { Router } from "piyo"
-import { IsNull, Not } from "typeorm"
 import { z } from "zod"
 
 import { dataSource } from "../../../../db/data-source.js"
@@ -7,6 +6,7 @@ import { Follow } from "../../../../db/entities/follow.js"
 import { Post } from "../../../../db/entities/post.js"
 import { User } from "../../../../db/entities/user.js"
 import { createFavourite, removeFavourite } from "../../../../shared/services/favourite.js"
+import { deliverToEveryone } from "../../../../shared/utils/deliver-to-everyone.js"
 import { LOCAL_DOMAIN } from "../../../environment.js"
 import { addJob } from "../../../utils/add-job.js"
 import { APIError } from "../../../utils/errors/api-error.js"
@@ -123,17 +123,11 @@ router.delete("/:id", async ctx => {
             "postsCount",
             1,
         )
-        const users = await manager.getRepository(User).find({
-            where: { domain: Not(IsNull()) },
-        })
-        for (const user of users) {
-            await addJob(manager.queryRunner, "deliverV1", {
-                activity: renderActivityPubPostDeleteActivity(post),
-                senderUserId: token.user.id,
-                targetUserId: user.id,
-                useSharedInbox: true,
-            })
-        }
+        await deliverToEveryone(
+            manager.queryRunner,
+            token.user,
+            renderActivityPubPostDeleteActivity(post),
+        )
     })
     ctx.body = await renderAPIPost(post, token.localUser) // ???
 })
