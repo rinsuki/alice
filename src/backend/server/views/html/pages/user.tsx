@@ -58,6 +58,7 @@ export const UserPage: React.FC<{ user: User; siteName: string; posts: Post[] }>
                 <title>
                     @{user.screenName} | {siteName}
                 </title>
+                <link rel="alternate" type="application/activity+json" href={user.uri} />
             </head>
             <body>
                 <h1>{siteName}</h1>
