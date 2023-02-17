@@ -63,6 +63,7 @@ export const UserPage: React.FC<{ user: User; siteName: string; posts: Post[] }>
             <body>
                 <h1>{siteName}</h1>
                 <h2>@{user.screenName}</h2>
+                <div dangerouslySetInnerHTML={{ __html: user.note }} />
                 <p>
                     <a href={`/@${user.screenName}`}>
                         <strong>{user.postsCount}</strong> Posts
