@@ -4,12 +4,10 @@ import { IsNull } from "typeorm"
 import { z } from "zod"
 
 import { dataSource } from "@/backend/db/data-source.js"
-import { Follow } from "@/backend/db/entities/follow.js"
 import { InboxLog } from "@/backend/db/entities/inbox_log.js"
 import { LocalUser } from "@/backend/db/entities/local-user.js"
-import { Notification } from "@/backend/db/entities/notification.js"
 import { User } from "@/backend/db/entities/user.js"
-import { addJob } from "@/backend/shared/utils/add-job.js"
+import { requestFollow, revertFollow } from "@/backend/shared/services/follow.js"
 import { generateSnowflakeID } from "@/backend/shared/utils/generate-snowflake.js"
 import { jsonLDCompact } from "@/backend/shared/utils/jsonld-compact.js"
 
@@ -67,14 +65,16 @@ export async function apInboxInner(requestor: User, body: any) {
                 if (undoFollowBody.actor !== undoFollowBody.object.actor)
                     throw new Error("UNDO_FOLLOW_WRONG_ACTOR")
                 if (undoFollowBody.actor !== requestor.uri) throw new Error("UNDO_BY_WRONG_ACTOR")
-                const follow = await manager.getRepository(Follow).findOne({
-                    where: { uri: undoFollowBody.object.id },
+                const fromUser = await manager.getRepository(User).findOne({
+                    where: { _uri: undoFollowBody.actor },
                 })
-                if (follow == null) {
-                    console.warn("UNDO_FOLLOW_NOT_FOUND", undoFollowBody.object.id)
-                    return
-                }
-                await manager.getRepository(Follow).remove(follow)
+                if (fromUser == null) throw new Error("UNDO_FROM_USER_NOT_FOUND")
+                const toUser = await manager.getRepository(User).findOne({
+                    where: { _uri: undoFollowBody.object.object, domain: IsNull() },
+                    relations: ["localUser"],
+                })
+                if (toUser == null) throw new Error("UNDO_TO_USER_NOT_FOUND")
+                await revertFollow(manager, fromUser, toUser, undoFollowBody.object.id)
                 log.lastProcessedVersion = CURRENT_INBOX_PROCESSOR_VERSION
                 await manager.save(log)
                 return
@@ -89,46 +89,18 @@ export async function apInboxInner(requestor: User, body: any) {
                 })
                 .parse(body)
             if (followBody.actor !== requestor.uri) throw new Error("FOLLOW_BY_WRONG_ACTOR")
-            const follow = new Follow()
-            follow.id = (await generateSnowflakeID()).toString()
-            follow.uri = followBody.id
-            follow.fromUser = await manager.getRepository(User).findOneOrFail({
-                where: { _uri: followBody.actor },
-            })
-            follow.toUser = await manager.getRepository(User).findOneOrFail({
-                where: { _uri: followBody.object },
-                relations: ["localUser"],
-            })
-            await manager.getRepository(Follow).insert(follow)
-            const notification = new Notification()
-            notification.id = (await generateSnowflakeID()).toString()
-            notification.type = "follow"
-            notification.receiver = follow.toUser.localUser!
-            notification.user = follow.fromUser
-            notification.follow = follow
-            await manager.getRepository(Notification).insert(notification)
+            await requestFollow(
+                manager,
+                await manager.getRepository(User).findOneOrFail({
+                    where: { _uri: followBody.actor },
+                }),
+                await manager.getRepository(User).findOneOrFail({
+                    where: { _uri: followBody.object },
+                    relations: ["localUser"],
+                }),
+                followBody.id,
+            )
             log.lastProcessedVersion = CURRENT_INBOX_PROCESSOR_VERSION
-            if (!follow.toUser.manuallyApprovesFollowers) {
-                follow.accepted = true
-                await manager.save(follow)
-                await addJob(manager.queryRunner, "deliverV1", {
-                    senderUserId: follow.toUser.id,
-                    targetUserId: follow.fromUser.id,
-                    useSharedInbox: false,
-                    activity: {
-                        "id": `${follow.toUser.uri}#accepts/follows/${follow.id}`,
-                        "type": "Accept",
-                        "actor": follow.toUser.uri,
-                        "object": {
-                            id: follow.uri,
-                            type: "Follow",
-                            actor: follow.fromUser.uri,
-                            object: follow.toUser.uri,
-                        },
-                        "@context": "https://www.w3.org/ns/activitystreams",
-                    },
-                })
-            }
             await manager.save(log)
         }
     })

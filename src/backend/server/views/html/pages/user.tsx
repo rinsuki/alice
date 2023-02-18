@@ -74,7 +74,7 @@ export const UserPage: React.FC<{ user: User; siteName: string; posts: Post[] }>
                     </a>
                     ・
                     <a href={`/@${user.screenName}/followers`}>
-                        <strong>{user.followingCount}</strong> Followers
+                        <strong>{user.followersCount}</strong> Followers
                     </a>
                 </p>
                 {posts.map(post => {

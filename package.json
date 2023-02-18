@@ -11,6 +11,7 @@
     "invite:create": "node dist/backend/cli/create-invite.js",
     "docker:typeorm": "typeorm -d dist/backend/db/data-source.js",
     "typeorm": "HAS_TS_NODE=1 NODE_OPTIONS=\"--loader ./ts-node-esm-with-alias.mjs\" node ./node_modules/typeorm/cli -d ./src/backend/db/data-source.ts",
+    "migration:create": "cd src/backend/db/migrations && HAS_TS_NODE=1 NODE_OPTIONS=\"--loader ../../../../ts-node-esm-with-alias.mjs\" node ../../../../node_modules/typeorm/cli migration:create",
     "migration:generate": "cd src/backend/db/migrations && HAS_TS_NODE=1 NODE_OPTIONS=\"--loader ../../../../ts-node-esm-with-alias.mjs\" node ../../../../node_modules/typeorm/cli migration:generate -d ../data-source.ts -p"
   },
   "dependencies": {
