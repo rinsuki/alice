@@ -90,7 +90,7 @@ router.get("/@:userName", async ctx => {
     })
     ctx.body = renderHTML(createElement(UserPage, { user, siteName, posts }))
 })
-router.get("/@:userName/:postId", async ctx => {
+router.get("/@:userName/:postId([0-9]+)", async ctx => {
     const { userName, postId } = z
         .object({
             userName: z.string(),
