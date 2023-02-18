@@ -124,6 +124,9 @@ router.get("/:id/followers", async ctx => {
             accepted: true,
         },
         relations: ["fromUser"],
+        order: {
+            id: "DESC",
+        },
     })
 
     ctx.body = follows.map(follow => renderAPIUser(follow.fromUser))
@@ -154,7 +157,7 @@ router.get("/:id/statuses", async ctx => {
             userID: user.id,
         },
         order: {
-            createdAt: "DESC",
+            id: "DESC",
         },
         relations: ["application", "user"],
     })
