@@ -30,7 +30,7 @@ export async function createFavourite(
             await createNotification(
                 {
                     type: "favourite",
-                    receiver: authorUser,
+                    receiverId: authorUser.userID,
                     user,
                     post,
                     favourite,

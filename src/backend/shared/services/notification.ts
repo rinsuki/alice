@@ -6,7 +6,7 @@ import { Notification } from "@/backend/db/entities/notification.js"
 import { generateSnowflakeID } from "../utils/generate-snowflake.js"
 
 export async function createNotification(
-    notificationParams: Omit<Notification, "id" | "createdAt" | "updatedAt">,
+    notificationParams: Omit<Notification, "id" | "receiver" | "createdAt" | "updatedAt">,
     manager: EntityManager = dataSource.manager,
 ) {
     return await manager.transaction(async manager => {
