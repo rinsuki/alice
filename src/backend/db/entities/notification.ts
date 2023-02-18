@@ -33,6 +33,9 @@ export class Notification extends EntityWithTimestamps {
     @JoinColumn({ name: "receiver_id" })
     receiver!: LocalUser
 
+    @Column("bigint", { name: "receiver_id", nullable: false })
+    receiverId!: string
+
     @Column("character varying", { nullable: false, length: 32 })
     type!: NotificationType
 
