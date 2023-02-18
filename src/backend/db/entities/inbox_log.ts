@@ -6,6 +6,7 @@ import { User } from "./user.js"
 
 @Entity("inbox_log")
 @Index(["uri"], { unique: false })
+@Index(["type", "objectType", "id"], {})
 export class InboxLog extends EntityWithTimestamps {
     @PrimaryColumn("bigint")
     id!: string
