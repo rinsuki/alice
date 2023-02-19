@@ -116,7 +116,10 @@ export async function apInbox(ctx: ContextFromRouter<Router>, inboxUser?: LocalU
         ctx.body = "Accepted"
     } catch (e) {
         // 知らない人が消えた時にinboxが一生エラーで死ぬのを何とかする
-        if (e instanceof HTTPError && e.response.statusCode === 410) {
+        if (
+            e instanceof HTTPError &&
+            (e.response.statusCode === 410 || e.response.statusCode === 404)
+        ) {
             const isGone = z
                 .object({
                     type: z.literal("Delete"),
@@ -127,6 +130,9 @@ export async function apInbox(ctx: ContextFromRouter<Router>, inboxUser?: LocalU
                 ctx.body = "Ignored since we don't know you, but rest in peace."
                 return
             }
+        }
+        if (e instanceof HTTPError) {
+            console.warn(`HTTP ${e.response.statusCode} - ${e.response.url}`)
         }
         throw e
     }
