@@ -6,10 +6,10 @@ import { addJob } from "../shared/utils/add-job.js"
 
 export async function enqueueReprocessInboxLog() {
     // find reprocess logs
-    const logs: { id: string }[] = await dataSource
+    const logs: { id: string; userId: string }[] = await dataSource
         .getRepository(InboxLog)
         .createQueryBuilder("log")
-        .select("log.id")
+        .select(["log.id", "log.user_id"])
         .andWhere(
             new Brackets(qb => {
                 qb.where("log.last_processed_version < :version", {
@@ -27,14 +27,22 @@ export async function enqueueReprocessInboxLog() {
             }),
         )
         .andWhere("log.was_undoed_by_inbox_log_id IS NULL")
+        .orderBy("log.id", "ASC")
         .getMany()
-
+    console.log(logs)
     await dataSource.transaction(async manager => {
         if (manager.queryRunner == null) throw new Error("MISSING_QUERY_RUNNER")
         for (const log of logs) {
-            await addJob(manager.queryRunner, "inboxReprocessV1", {
-                inboxLogId: log.id,
-            })
+            await addJob(
+                manager.queryRunner,
+                "inboxReprocessV1",
+                {
+                    inboxLogId: log.id,
+                },
+                {
+                    queueName: "inbox:" + log.userId,
+                },
+            )
         }
     })
 }
