@@ -25,7 +25,7 @@ export async function createFavourite(
         await manager.increment(Post, { id: post.id }, "favouritesCount", 1)
         const authorUser = await manager
             .getRepository(LocalUser)
-            .findOne({ where: { userID: user.id } })
+            .findOne({ where: { userID: post.userID } })
         if (authorUser != null) {
             await createNotification(
                 {

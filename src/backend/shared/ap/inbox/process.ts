@@ -4,6 +4,7 @@ import { z } from "zod"
 import { InboxLog } from "@/backend/db/entities/inbox_log.js"
 
 import { handleInboxFollow } from "./handlers/follow.js"
+import { handleInboxLike, handleInboxUndoLike } from "./handlers/like.js"
 import { handleInboxUndoFollow } from "./handlers/undo-follow.js"
 
 export async function processInbox(manager: EntityManager, log: InboxLog) {
@@ -27,8 +28,12 @@ export async function processInbox(manager: EntityManager, log: InboxLog) {
         await manager.save(undoTargetLog)
         if (objectType === "Follow") {
             await handleInboxUndoFollow(manager, log)
+        } else if (objectType === "Like") {
+            await handleInboxUndoLike(manager, log)
         }
     } else if (type === "Follow") {
         await handleInboxFollow(manager, log)
+    } else if (type === "Like") {
+        await handleInboxLike(manager, log)
     }
 }
