@@ -52,3 +52,14 @@ export async function renderActivityPubUserOutbox(user: User) {
         "items": posts.map(post => renderActivityPubPost(post)),
     }
 }
+
+export function renderActivityPubUserFollowers(user: User) {
+    if (user.domain != null) throw new Error("TRY_TO_RENDER_REMOTE_USER_ON_ACTIVITY_PUB")
+
+    return {
+        "@context": "https://www.w3.org/ns/activitystreams",
+        "id": user.followersURL,
+        "type": "OrderedCollection",
+        "totalItems": Number(user.followersCount),
+    }
+}
