@@ -4,8 +4,19 @@ import { Post } from "@/backend/db/entities/post.js"
 import { LOCAL_DOMAIN, siteName } from "@/backend/shared/environment.js"
 import { safeURLOrNull } from "@/backend/shared/utils/safe-url-or-null.js"
 
-export const PostPage: React.FC<{ post: Post; siteName: string }> = ({ post }) => {
-    const attachments: ReactNode[] = [post.createdAt.toISOString()]
+export const PostComponent: React.FC<{ post: Post; inDetailPage: boolean }> = ({
+    post,
+    inDetailPage,
+}) => {
+    const attachments: ReactNode[] = [
+        inDetailPage ? (
+            post.createdAt.toISOString()
+        ) : (
+            <a href={`/@${post.user.screenName}/${post.id}`} key="date">
+                {post.createdAt.toISOString()}
+            </a>
+        ),
+    ]
     if (post.application != null) {
         attachments.push(
             <>
@@ -16,6 +27,36 @@ export const PostPage: React.FC<{ post: Post; siteName: string }> = ({ post }) =
             </>,
         )
     }
+    if (post.favouritesCount > 0) {
+        attachments.push(`★ ${post.favouritesCount}`)
+    }
+    return (
+        <>
+            {post.spoiler.length ? (
+                <details>
+                    <summary>{post.spoiler}</summary>
+                    <div dangerouslySetInnerHTML={{ __html: post.html }} />
+                </details>
+            ) : (
+                <div dangerouslySetInnerHTML={{ __html: post.html }} />
+            )}
+            <footer>
+                <small>
+                    {...attachments.map((a, i) => {
+                        return (
+                            <>
+                                {a}
+                                {i !== attachments.length - 1 ? "・" : ""}
+                            </>
+                        )
+                    })}
+                </small>
+            </footer>
+        </>
+    )
+}
+
+export const PostPage: React.FC<{ post: Post; siteName: string }> = ({ post }) => {
     return (
         <html>
             <head>
@@ -45,26 +86,7 @@ export const PostPage: React.FC<{ post: Post; siteName: string }> = ({ post }) =
                         <a href={`/@${post.user.screenName}`}>@{post.user.screenName}</a>
                         &apos;s post
                     </h2>
-                    {post.spoiler.length ? (
-                        <details>
-                            <summary>{post.spoiler}</summary>
-                            <div dangerouslySetInnerHTML={{ __html: post.html }} />
-                        </details>
-                    ) : (
-                        <div dangerouslySetInnerHTML={{ __html: post.html }} />
-                    )}
-                    <footer>
-                        <small>
-                            {...attachments.map((a, i) => {
-                                return (
-                                    <>
-                                        {a}
-                                        {i !== attachments.length - 1 ? "・" : ""}
-                                    </>
-                                )
-                            })}
-                        </small>
-                    </footer>
+                    <PostComponent post={post} inDetailPage={true} />
                 </article>
             </body>
         </html>

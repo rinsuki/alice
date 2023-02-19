@@ -1,50 +1,9 @@
-import React, { ReactNode } from "react"
+import React from "react"
 
 import { Post } from "@/backend/db/entities/post.js"
 import { User } from "@/backend/db/entities/user.js"
-import { safeURLOrNull } from "@/backend/shared/utils/safe-url-or-null.js"
 
-const PostComponent: React.FC<{ post: Post }> = ({ post }) => {
-    const attachments: ReactNode[] = [
-        <a href={`/@${post.user.screenName}/${post.id}`} key="date">
-            {post.createdAt.toISOString()}
-        </a>,
-    ]
-    if (post.application != null) {
-        attachments.push(
-            <>
-                via{" "}
-                <a href={safeURLOrNull(post.application.website, false) ?? undefined}>
-                    {post.application.name}
-                </a>
-            </>,
-        )
-    }
-    return (
-        <>
-            {post.spoiler.length ? (
-                <details>
-                    <summary>{post.spoiler}</summary>
-                    <div dangerouslySetInnerHTML={{ __html: post.html }} />
-                </details>
-            ) : (
-                <div dangerouslySetInnerHTML={{ __html: post.html }} />
-            )}
-            <footer>
-                <small>
-                    {...attachments.map((a, i) => {
-                        return (
-                            <>
-                                {a}
-                                {i !== attachments.length - 1 ? "・" : ""}
-                            </>
-                        )
-                    })}
-                </small>
-            </footer>
-        </>
-    )
-}
+import { PostComponent } from "./post.js"
 
 export const UserPage: React.FC<{ user: User; siteName: string; posts: Post[] }> = ({
     user,
@@ -82,7 +41,7 @@ export const UserPage: React.FC<{ user: User; siteName: string; posts: Post[] }>
                         <>
                             <hr />
                             <article id={post.id} key={post.id}>
-                                <PostComponent post={post} />
+                                <PostComponent post={post} inDetailPage={false} />
                             </article>
                         </>
                     )
