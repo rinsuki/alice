@@ -5,6 +5,7 @@ import { DATABASE_URL_WITH_PASSWORD } from "../db/url.js"
 
 import { queueSchema } from "./schema.js"
 import { deliverV1 } from "./tasks/deliver.js"
+import { inboxReprocessV1 } from "./tasks/inbox-reprocess.js"
 
 if (!dataSource.isInitialized) {
     await dataSource.initialize()
@@ -17,6 +18,7 @@ const runner = await run({
     pollInterval: 5000,
     taskList: {
         deliverV1,
+        inboxReprocessV1,
     } satisfies Record<keyof typeof queueSchema, unknown>,
 })
 

@@ -7,4 +7,7 @@ export const queueSchema = {
         useSharedInbox: z.boolean(),
         activity: z.unknown(),
     }),
+    inboxReprocessV1: z.object({
+        inboxLogId: z.string(),
+    }),
 } as const
