@@ -87,4 +87,12 @@ export class User extends EntityWithTimestamps {
         if (this.domain != null) return this.acct
         return `${this.screenName}@${LOCAL_DOMAIN}`
     }
+
+    get isRemote() {
+        return this.domain != null
+    }
+
+    get isLocal() {
+        return this.domain == null
+    }
 }
