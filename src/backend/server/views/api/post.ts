@@ -55,7 +55,7 @@ export async function renderAPIPosts<P extends Post[]>(
             ? {
                   favourites: arrayToMapById(
                       await dataSource.getRepository(Favourite).find({
-                          where: { postId: In(posts.map(p => p.id)) },
+                          where: { postId: In(posts.map(p => p.id)), userId: requestUser.userID },
                           select: ["postId"],
                       }),
                       "postId",
