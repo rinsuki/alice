@@ -22,7 +22,10 @@ export async function processInbox(manager: EntityManager, log: InboxLog) {
             })
             .parse(body)
         const undoTargetLog = await manager.findOneOrFail(InboxLog, {
-            where: { uri: objectId, wasUndoedBy: IsNull() },
+            where: [
+                { uri: objectId, wasUndoedByInboxLogId: IsNull() },
+                { uri: objectId, wasUndoedByInboxLogId: log.id },
+            ],
         })
         undoTargetLog.wasUndoedBy = log
         await manager.save(undoTargetLog)
