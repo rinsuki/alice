@@ -1,4 +1,4 @@
-import { EntityManager } from "typeorm"
+import { EntityManager, QueryFailedError } from "typeorm"
 
 import { dataSource } from "@/backend/db/data-source.js"
 import { Favourite } from "@/backend/db/entities/favourite.js"
@@ -21,7 +21,19 @@ export async function createFavourite(
         favourite.id = (await generateSnowflakeID()).toString()
         favourite.user = user
         favourite.post = post
-        await manager.insert(Favourite, favourite)
+        try {
+            await manager.transaction(async manager => manager.insert(Favourite, favourite))
+        } catch (e) {
+            if (e instanceof QueryFailedError) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                if (e.driverError.constraint === "UQ_b109386fecf57cabff6c33bec6b") {
+                    // alredy created favourite
+                    return
+                }
+                console.error(e)
+            }
+            throw e
+        }
         await manager.increment(Post, { id: post.id }, "favouritesCount", 1)
         const authorUser = await manager
             .getRepository(LocalUser)
