@@ -38,10 +38,16 @@ export class InboxLog extends EntityWithTimestamps {
     @JoinColumn({ name: "was_undoed_by_inbox_log_id" })
     wasUndoedBy!: InboxLog | null
 
+    @Column("bigint", { name: "was_undoed_by_inbox_log_id", nullable: true })
+    wasUndoedByInboxLogId!: string | null
+
     @Column("int", { name: "last_processed_version", nullable: true })
     lastProcessedVersion!: number
 
     @ManyToOne(() => User)
     @JoinColumn({ name: "user_id" })
     user!: User
+
+    @Column("bigint", { name: "user_id" })
+    userId!: string
 }
