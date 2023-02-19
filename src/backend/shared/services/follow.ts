@@ -34,7 +34,7 @@ async function whenAcceptsFollow(
             manager,
         )
     }
-    if (fromUser.domain == null) {
+    if (fromUser.domain != null) {
         await addJob(manager.queryRunner!, "deliverV1", {
             senderUserId: toUser.id,
             targetUserId: fromUser.id,
